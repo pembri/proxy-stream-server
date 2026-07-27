@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "functions": {
+    "api/proxy.py": {
+      "runtime": "python3.11"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/stream/live/:group/:slug/master.m3u8",
+      "destination": "/api/proxy?group=:group&slug=:slug"
+    },
+    {
+      "source": "/api/segment",
+      "destination": "/api/proxy?route=segment"
+    }
+  ]
+}
