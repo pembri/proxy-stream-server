@@ -2,7 +2,11 @@
 
 ## Status saat ini
 - **Grup 01** (`103.148.44.38:8001`) — jalan, tapi kadang buffering (bitrate 4-5Mbps, cuma 1 variant, gak ada pilihan rendah).
-- **Grup 02** (`103.58.160.157:8278`) — jalan lancar. Origin ini butuh `User-Agent` khusus (lihat `channel.json` -> `"02".user_agent`), kalau gak dikirim origin bisa nolak/berulah.
+- **Grup 02** — sumber lama (`103.58.160.157:8278`) MATI TOTAL, sudah diganti (per tanggal update ini) dengan 2 sumber baru sekaligus, base_url dikosongkan & tiap channel pakai URL absolute penuh:
+  - `cdn-server-rctiplus.vidiraplay.biz.id` → rcti, mnctv, gtv, inews (multi-bitrate 144p-720p)
+  - `cdn-transmedia-server.vidiraplay.biz.id` → trans-tv, trans-7, cnn-indonesia, cnbc-indonesia (proxy ke video.detik.com / live.cnbcindonesia.com, single-bitrate 720p)
+  - Cuma 8 channel (dulu grup 02 lama isinya 55 channel) — channel lain yang gak ada penggantinya sengaja dihapus atas keputusan user, bukan kelupaan.
+  - Kedua sumber ini gak butuh User-Agent khusus (beda dari grup 02 versi lama).
 - Domain proxy yang dipakai: `proxy-stream-server.vidiraplay.biz.id` (custom domain di Vercel, project `proxy-stream-server`).
 - Secret token (`PROXY_SECRET_KEY`) di-set lewat Environment Variables di dashboard Vercel — JANGAN taruh secret di kode.
 
