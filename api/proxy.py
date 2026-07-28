@@ -134,10 +134,19 @@ def rewrite_playlist(body_text, origin_url, group, slug, exp, token, user_agent)
         u = encode_u(abs_url)
         new_exp = exp
         new_token = make_token(group, slug, new_exp, u)
-        proxied = (
-            f"/stream/live/{group}/{slug}/{abs_url.rsplit('/', 1)[-1]}"
-            f"?exp={new_exp}&token={new_token}&u={u}"
-        )
+
+        # Nama file di path proxy HARUS bersih dari query string origin
+        # (beberapa origin, misal rctiplus, punya URL variant yang sendirinya
+        # mengandung "?url=..." - kalau ini ditempel apa adanya ke path lalu
+        # ditambah "?exp=...&token=..." lagi, hasilnya ada 2 tanda "?" dalam
+        # 1 URL dan bikin query exp/token/u gagal ke-parse -> stuck/loading).
+        # Makanya nama file dibikin generik aja berdasarkan ekstensi,
+        # detail URL asli sepenuhnya disimpan di param "u".
+        path_only = abs_url.split("?", 1)[0].split("#", 1)[0]
+        filename = "segment.ts" if not path_only.endswith(".m3u8") else "playlist.m3u8"
+
+        query = urllib.parse.urlencode({"exp": new_exp, "token": new_token, "u": u})
+        proxied = f"/stream/live/{group}/{slug}/{filename}?{query}"
         out_lines.append(proxied)
     return "\n".join(out_lines)
 
