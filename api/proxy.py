@@ -78,10 +78,20 @@ def get_group_ua(group):
     return grp.get("user_agent") if grp else None
 
 
-def fetch_origin(url, user_agent=None):
+DEFAULT_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+CHUNK_SIZE = 65536  # 64KB
+
+
+def open_origin(url, user_agent=None, timeout=20):
     req = urllib.request.Request(url)
-    req.add_header("User-Agent", user_agent or "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-    with urllib.request.urlopen(req, timeout=15) as resp:
+    req.add_header("User-Agent", user_agent or DEFAULT_UA)
+    return urllib.request.urlopen(req, timeout=timeout)
+
+
+def fetch_origin(url, user_agent=None):
+    # Dipakai khusus untuk playlist (.m3u8) yang perlu di-parse penuh,
+    # ukurannya kecil jadi aman dibaca sekaligus.
+    with open_origin(url, user_agent) as resp:
         return resp.status, resp.read(), resp.headers.get("Content-Type", "")
 
 
@@ -162,21 +172,58 @@ class handler(BaseHTTPRequestHandler):
                 if not origin_url:
                     return self._send(404, "Channel tidak ditemukan")
 
+            is_playlist = origin_url.split("?")[0].split("#")[0].endswith(".m3u8")
+
+            if is_playlist:
+                try:
+                    status, body, ctype = fetch_origin(origin_url, user_agent)
+                except urllib.error.HTTPError as e:
+                    return self._send(e.code, f"Upstream error {e.code}")
+                except Exception as e:
+                    return self._send(502, f"Gagal fetch origin: {e}")
+                text = body.decode("utf-8", errors="ignore")
+                rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent)
+                return self._send(200, rewritten, "application/vnd.apple.mpegurl")
+
+            # Segmen (.ts dll) -> stream langsung, tidak dibuffer penuh ke
+            # memori, supaya player lebih cepat mulai nerima data (mengurangi buffering).
             try:
-                status, body, ctype = fetch_origin(origin_url, user_agent)
+                origin_resp = open_origin(origin_url, user_agent)
             except urllib.error.HTTPError as e:
                 return self._send(e.code, f"Upstream error {e.code}")
             except Exception as e:
                 return self._send(502, f"Gagal fetch origin: {e}")
 
-            is_playlist = origin_url.split("?")[0].endswith(".m3u8") or "mpegurl" in ctype.lower()
+            with origin_resp:
+                out_ctype = origin_resp.headers.get("Content-Type") or "video/MP2T"
+                content_length = origin_resp.headers.get("Content-Length")
 
-            if is_playlist:
-                text = body.decode("utf-8", errors="ignore")
-                rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent)
-                return self._send(200, rewritten, "application/vnd.apple.mpegurl")
-            else:
-                out_ctype = ctype if ctype else "video/MP2T"
-                return self._send(200, body, out_ctype)
+                self.send_response(200)
+                self.send_header("Content-Type", out_ctype)
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.send_header("Cache-Control", "no-store, no-cache, must-revalidate")
+                if content_length:
+                    self.send_header("Content-Length", content_length)
+                    self.end_headers()
+                    remaining = int(content_length)
+                    while remaining > 0:
+                        chunk = origin_resp.read(min(CHUNK_SIZE, remaining))
+                        if not chunk:
+                            break
+                        self.wfile.write(chunk)
+                        remaining -= len(chunk)
+                else:
+                    # Tidak ada Content-Length dari origin -> pakai chunked transfer encoding.
+                    self.send_header("Transfer-Encoding", "chunked")
+                    self.end_headers()
+                    while True:
+                        chunk = origin_resp.read(CHUNK_SIZE)
+                        if not chunk:
+                            self.wfile.write(b"0\r\n\r\n")
+                            break
+                        self.wfile.write(f"{len(chunk):X}\r\n".encode("ascii"))
+                        self.wfile.write(chunk)
+                        self.wfile.write(b"\r\n")
+                return
 
         return self._send(404, "Not found")
