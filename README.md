@@ -19,7 +19,31 @@
 4. **Kalau ada nama channel dobel dalam 1 grup**, slug kedua & seterusnya dikasih akhiran `-2`, `-3` (contoh: `pbs-kids`, `pbs-kids-2`, `formosa-tv`, `formosa-tv-2`).
 5. Setelah nambah grup baru, update juga 2 file gabungan (`gabungan_angka_transvision.m3u8` dan `gabungan_angka_transvision_original.m3u8`) supaya channel baru ikut kepakai di playlist utama.
 
+## Kalau sebuah SUMBER MATI (origin down/expired) — gimana cek & apa yang boleh diubah
+1. **Cek dulu itu beneran mati atau cuma channel tertentu.** Test manual (curl/Termux) ke beberapa channel berbeda dari grup yang sama:
+   - Kalau SEMUA channel di grup itu gagal (403/404/timeout/body kosong terus-terusan) -> sumber/origin-nya yang mati.
+   - Kalau cuma 1-2 channel doang -> kemungkinan channel itu aja yang dipindah/dimatiin provider, sumbernya masih hidup.
+2. **Pola pengecekan "mati beneran" vs "sementara/rate-limit":** ulangi test 2-3x dengan jeda (~30 detik). Kalau hasilnya konsisten kosong/gagal di semua percobaan dan semua channel, baru dianggap mati. Jangan asumsi mati dari 1x percobaan doang (pernah kejadian: ogietv sempat kasih 302 valid di percobaan pertama, tapi ternyata memang sumbernya mati permanen setelah dicek berkali-kali dan channel lain di web/app juga mati).
+3. **Kalau terbukti mati:** JANGAN dihapus otomatis oleh Claude. Laporkan ke user channel/grup mana yang mati, tunggu keputusan user (mau dihapus, ditunggu nyala lagi, atau diganti sumber baru).
+
+## Cara HAPUS grup atau channel (tanpa ganggu grup lain)
+- **Hapus 1 channel dalam grup:** hapus baris/key slug itu dari `"channels"` di grup terkait pada `channel.json`. Tidak ada file lain yang perlu diubah kecuali 2 playlist gabungan (hapus baris `#EXTINF` + URL channel itu di `gabungan_angka_transvision.m3u8` dan `gabungan_angka_transvision_original.m3u8`).
+- **Hapus 1 grup penuh (misal grup 03 mati total):** hapus seluruh key grup itu (`"03": {...}`) dari `channel.json`. `proxy.py` TIDAK PERLU diubah sama sekali — karena route handler generik cuma baca channel.json, grup yang sudah dihapus otomatis dapat respons 404 "Channel tidak ditemukan" kalau masih ada yang akses. Hapus juga semua baris channel grup itu dari 2 file playlist gabungan.
+- Setelah hapus apa pun, jangan lupa update juga `_readme` di channel.json dan bagian "Status saat ini" di README ini biar gak nyasar/bingung di sesi berikutnya.
+
+## Cara GANTI sumber suatu grup (origin lama mati, diganti origin baru) tanpa ganggu grup lain
+Karena tiap grup punya "perlakuan khusus" sendiri (grup 01 = tanpa UA khusus tapi rawan buffering; grup 02 = wajib UA khusus tapi lancar), kalau salah satu origin diganti:
+1. **Test origin baru dulu dari nol** (ulangi proses testing manual: curl dengan/tanpa UA, cek redirect, cek apakah nama variant/segmen berubah tiap request, cek butuh header apa aja) — JANGAN asumsi origin baru punya kebutuhan header yang sama dengan origin lama di grup itu.
+2. **Update HANYA field di dalam grup itu** di `channel.json`: `base_url` dan `user_agent` (sesuai kebutuhan origin baru, bisa jadi beda dari sebelumnya), serta isi `"channels"` (path/slug bisa jadi beda strukturnya, misal dari `/play/aXXX/index.m3u8` ke pola lain). Slug (nama key) sebisa mungkin dipertahankan sama supaya URL proxy yang sudah dipakai user (di playlist gabungan / app IPTV) tetap valid.
+3. **Grup lain (yang gak diganti) TIDAK BOLEH ikut diubah** — baik base_url, user_agent, channels-nya, maupun kode di `proxy.py`. Kode proxy sudah generik per-grup (baca dari channel.json), jadi mengganti origin 1 grup secara teknis tidak menyentuh grup lain sama sekali selama cuma edit channel.json.
+4. **Kalau origin baru butuh perlakuan yang gak bisa ditangani logic generik yang ada** (misal butuh cookie session, butuh 2-step request/token dari halaman lain, dsb — seperti kasus ogietv yang butuh session flow), ini BUTUH kode tambahan di `proxy.py`. Kalau begini, tambahkan sebagai jalur/percabangan khusus untuk grup itu SAJA (misal dicek `if group == "03": ...`), jangan ubah logic umum yang dipakai semua grup (`make_token`, `verify_token`, `rewrite_playlist`, streaming chunked). Diskusikan dulu ke user sebelum nambah percabangan kayak gini, karena nambah kompleksitas.
+5. Update 2 file playlist gabungan sesuai origin/slug baru.
+
+
 ## Yang JANGAN dilakukan tanpa diminta eksplisit
+- Jangan hapus grup/channel apa pun cuma karena kelihatan/diduga mati — selalu konfirmasi ke user dulu, kecuali user sudah eksplisit bilang "hapus".
+- Jangan ganti origin suatu grup pakai asumsi origin baru "pasti sama perlakuannya" dengan origin lama — selalu test ulang dari nol.
 - Jangan refactor `proxy.py` jadi arsitektur lain (misal ganti ke framework/serverless pattern lain) — sudah pas dengan constraint Vercel Python runtime + requirements.txt kosong.
 - Jangan gabung/samakan logic grup 01 dan 02 walau kelihatan mirip — karakteristik origin-nya beda (lihat catatan buffering di atas).
 - Jangan ganti cara streaming segmen `.ts` balik ke buffer-penuh (`resp.read()`) — itu penyebab buffering yang sudah diperbaiki.
+- Jangan nambah percabangan kode khusus per-grup di `proxy.py` (`if group == "xx"`) tanpa didiskusikan dulu ke user — logic generik yang ada harus tetap jadi default.
