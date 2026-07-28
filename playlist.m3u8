@@ -97,113 +97,19 @@ https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/01/vtv/master.m
 https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/01/wof-sport/master.m3u8
 #EXTINF:-1 group-title="Grup 01",Zoo Moo
 https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/01/zoo-moo/master.m3u8
-#EXTINF:-1 group-title="Grup 02",ABC AUSTRALIA
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/abc-australia/master.m3u8
-#EXTINF:-1 group-title="Grup 02",ALJAZEERA ENGLISH
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/aljazeera-english/master.m3u8
-#EXTINF:-1 group-title="Grup 02",ANTV
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/antv/master.m3u8
-#EXTINF:-1 group-title="Grup 02",ARIRANG
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/arirang/master.m3u8
-#EXTINF:-1 group-title="Grup 02",AXN
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/axn/master.m3u8
-#EXTINF:-1 group-title="Grup 02",BALI TV
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/bali-tv/master.m3u8
-#EXTINF:-1 group-title="Grup 02",BTV
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/btv/master.m3u8
-#EXTINF:-1 group-title="Grup 02",CARTOON NETWORK
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/cartoon-network/master.m3u8
-#EXTINF:-1 group-title="Grup 02",CARTOONITO
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/cartoonito/master.m3u8
-#EXTINF:-1 group-title="Grup 02",CCTV 4 ASIA
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/cctv-4-asia/master.m3u8
-#EXTINF:-1 group-title="Grup 02",CELESTIAL MOVIES
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/celestial-movies/master.m3u8
-#EXTINF:-1 group-title="Grup 02",CGTN
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/cgtn/master.m3u8
-#EXTINF:-1 group-title="Grup 02",CGTN DOCUMENTARY
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/cgtn-documentary/master.m3u8
-#EXTINF:-1 group-title="Grup 02",CINEMAWORLD
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/cinemaworld/master.m3u8
-#EXTINF:-1 group-title="Grup 02",CINEMAX
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/cinemax/master.m3u8
-#EXTINF:-1 group-title="Grup 02",CNA
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/cna/master.m3u8
-#EXTINF:-1 group-title="Grup 02",CNN INDONESIA
+#EXTINF:-1 group-title="Grup 02",CNBC Indonesia
+https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/cnbc-indonesia/master.m3u8
+#EXTINF:-1 group-title="Grup 02",CNN Indonesia
 https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/cnn-indonesia/master.m3u8
-#EXTINF:-1 group-title="Grup 02",DAAI TV
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/daai-tv/master.m3u8
-#EXTINF:-1 group-title="Grup 02",DW ENGLISH
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/dw-english/master.m3u8
-#EXTINF:-1 group-title="Grup 02",EAT & GO
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/eat-and-go/master.m3u8
-#EXTINF:-1 group-title="Grup 02",EURONEWS.
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/euronews./master.m3u8
-#EXTINF:-1 group-title="Grup 02",FASHION TV SOUTHEAST ASIA
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/fashion-tv-southeast-asia/master.m3u8
-#EXTINF:-1 group-title="Grup 02",FIGHT TV
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/fight-tv/master.m3u8
-#EXTINF:-1 group-title="Grup 02",FRANCE 24
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/france-24/master.m3u8
-#EXTINF:-1 group-title="Grup 02",GAMING TV
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/gaming-tv/master.m3u8
-#EXTINF:-1 group-title="Grup 02",GOLF PLUS ID
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/golf-plus-id/master.m3u8
 #EXTINF:-1 group-title="Grup 02",GTV
 https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/gtv/master.m3u8
-#EXTINF:-1 group-title="Grup 02",HBO
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/hbo/master.m3u8
-#EXTINF:-1 group-title="Grup 02",HBO FAMILY
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/hbo-family/master.m3u8
-#EXTINF:-1 group-title="Grup 02",HBO HITS
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/hbo-hits/master.m3u8
-#EXTINF:-1 group-title="Grup 02",INDOSIAR
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/indosiar/master.m3u8
-#EXTINF:-1 group-title="Grup 02",!NSERT
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/insert/master.m3u8
-#EXTINF:-1 group-title="Grup 02",KBS WORLD
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/kbs-world/master.m3u8
-#EXTINF:-1 group-title="Grup 02",KNOWLEDGE+
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/knowledge+/master.m3u8
-#EXTINF:-1 group-title="Grup 02",KOMPAS TV
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/kompas-tv/master.m3u8
-#EXTINF:-1 group-title="Grup 02",MDTV
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/mdtv/master.m3u8
-#EXTINF:-1 group-title="Grup 02",METRO TV
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/metro-tv/master.m3u8
+#EXTINF:-1 group-title="Grup 02",iNews
+https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/inews/master.m3u8
 #EXTINF:-1 group-title="Grup 02",MNCTV
 https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/mnctv/master.m3u8
-#EXTINF:-1 group-title="Grup 02",MUSIK INDONESIA
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/musik-indonesia/master.m3u8
-#EXTINF:-1 group-title="Grup 02",NHK WORLD JAPAN
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/nhk-world-japan/master.m3u8
-#EXTINF:-1 group-title="Grup 02",NHK WORLD PREMIUM
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/nhk-world-premium/master.m3u8
 #EXTINF:-1 group-title="Grup 02",RCTI
 https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/rcti/master.m3u8
-#EXTINF:-1 group-title="Grup 02",RTV
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/rtv/master.m3u8
-#EXTINF:-1 group-title="Grup 02",SCTV
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/sctv/master.m3u8
-#EXTINF:-1 group-title="Grup 02",SPORTS TV
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/sports-tv/master.m3u8
-#EXTINF:-1 group-title="Grup 02",THRILL
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/thrill/master.m3u8
-#EXTINF:-1 group-title="Grup 02",TRANS 7
+#EXTINF:-1 group-title="Grup 02",Trans 7
 https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/trans-7/master.m3u8
-#EXTINF:-1 group-title="Grup 02",TRANS TV
+#EXTINF:-1 group-title="Grup 02",Trans TV
 https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/trans-tv/master.m3u8
-#EXTINF:-1 group-title="Grup 02",TV5 MONDE
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/tv5-monde/master.m3u8
-#EXTINF:-1 group-title="Grup 02",TVN
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/tvn/master.m3u8
-#EXTINF:-1 group-title="Grup 02",TVN MOVIES
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/tvn-movies/master.m3u8
-#EXTINF:-1 group-title="Grup 02",TV ONE
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/tvone/master.m3u8
-#EXTINF:-1 group-title="Grup 02",TVRI NASIONAL
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/tvri/master.m3u8
-#EXTINF:-1 group-title="Grup 02",TVRI SPORT
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/tvri-sport/master.m3u8
-#EXTINF:-1 group-title="Grup 02",WARNER BROS.TV
-https://proxy-stream-server.vidiraplay.biz.id/stream-hls/channel/02/warner-bros.tv/master.m3u8
