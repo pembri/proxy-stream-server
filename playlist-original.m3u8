@@ -1,0 +1,264 @@
+#EXTM3U
+#EXTINF:-1 group-title="Grup 01",Animax
+http://103.148.44.38:8001/play/a002/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Aniplus
+http://103.148.44.38:8001/play/a001/index.m3u8
+#EXTINF:-1 group-title="Grup 01",AXN
+http://103.148.44.38:8001/play/a013/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Bloomberg TV
+http://103.148.44.38:8001/play/a062/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Celestial Movies
+http://103.148.44.38:8001/play/a005/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Cinemax
+http://103.148.44.38:8001/play/a047/index.m3u8
+#EXTINF:-1 group-title="Grup 01",CNA
+http://103.148.44.38:8001/play/a065/index.m3u8
+#EXTINF:-1 group-title="Grup 01",CNBC Indonesia
+http://103.148.44.38:8001/play/a028/index.m3u8
+#EXTINF:-1 group-title="Grup 01",CNN Indonesia
+http://103.148.44.38:8001/play/a010/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Dragon TV
+http://103.148.44.38:8001/play/a007/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Flik
+http://103.148.44.38:8001/play/a045/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Formosa TV
+http://103.148.44.38:8001/play/a053/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Formosa TV
+http://103.148.44.38:8001/play/a057/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Galaxy
+http://103.148.44.38:8001/play/a063/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Galaxy Premium
+http://103.148.44.38:8001/play/a054/index.m3u8
+#EXTINF:-1 group-title="Grup 01",HBO
+http://103.148.44.38:8001/play/a009/index.m3u8
+#EXTINF:-1 group-title="Grup 01",HBO Family
+http://103.148.44.38:8001/play/a024/index.m3u8
+#EXTINF:-1 group-title="Grup 01",HBO Signature
+http://103.148.44.38:8001/play/a051/index.m3u8
+#EXTINF:-1 group-title="Grup 01",HITS
+http://103.148.44.38:8001/play/a09x/index.m3u8
+#EXTINF:-1 group-title="Grup 01",KBS World
+http://103.148.44.38:8001/play/a049/index.m3u8
+#EXTINF:-1 group-title="Grup 01",KIX
+http://103.148.44.38:8001/play/a048/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Kompas TV
+http://103.148.44.38:8001/play/a011/index.m3u8
+#EXTINF:-1 group-title="Grup 01",KTV
+http://103.148.44.38:8001/play/a026/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Magna Channel
+http://103.148.44.38:8001/play/a046/index.m3u8
+#EXTINF:-1 group-title="Grup 01",MAX Reels
+http://103.148.44.38:8001/play/a003/index.m3u8
+#EXTINF:-1 group-title="Grup 01",MDTV
+http://103.148.44.38:8001/play/a044/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Metro TV
+http://103.148.44.38:8001/play/a004/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Moji TV
+http://103.148.44.38:8001/play/a014/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Nick JR
+http://103.148.44.38:8001/play/a015/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Nickelodeon
+http://103.148.44.38:8001/play/a041/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Nusantara TV
+http://103.148.44.38:8001/play/a025/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Outdoor
+http://103.148.44.38:8001/play/a042/index.m3u8
+#EXTINF:-1 group-title="Grup 01",PBS Kids
+http://103.148.44.38:8001/play/a039/index.m3u8
+#EXTINF:-1 group-title="Grup 01",PBS Kids
+http://103.148.44.38:8001/play/a040/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Redbull
+http://103.148.44.38:8001/play/a035/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Rock Entertainment
+http://103.148.44.38:8001/play/a060/index.m3u8
+#EXTINF:-1 group-title="Grup 01",RTV
+http://103.148.44.38:8001/play/a017/index.m3u8
+#EXTINF:-1 group-title="Grup 01",SPOTV 2
+http://103.148.44.38:8001/play/a018/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Trans 7
+http://103.148.44.38:8001/play/a019/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Trans TV
+http://103.148.44.38:8001/play/a064/index.m3u8
+#EXTINF:-1 group-title="Grup 01",TVBS
+http://103.148.44.38:8001/play/a059/index.m3u8
+#EXTINF:-1 group-title="Grup 01",TVN
+http://103.148.44.38:8001/play/a032/index.m3u8
+#EXTINF:-1 group-title="Grup 01",TVN Movies
+http://103.148.44.38:8001/play/a058/index.m3u8
+#EXTINF:-1 group-title="Grup 01",TVOne
+http://103.148.44.38:8001/play/a020/index.m3u8
+#EXTINF:-1 group-title="Grup 01",TVRI
+http://103.148.44.38:8001/play/a021/index.m3u8
+#EXTINF:-1 group-title="Grup 01",TVRI Sport
+http://103.148.44.38:8001/play/a027/index.m3u8
+#EXTINF:-1 group-title="Grup 01",VTV
+http://103.148.44.38:8001/play/a023/index.m3u8
+#EXTINF:-1 group-title="Grup 01",WOF Sport
+http://103.148.44.38:8001/play/a030/index.m3u8
+#EXTINF:-1 group-title="Grup 01",Zoo Moo
+http://103.148.44.38:8001/play/a052/index.m3u8
+#EXTINF:-1 group-title="Grup 02",ABC AUSTRALIA
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-ABCAUSTRALIA/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",ALJAZEERA ENGLISH
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-ALJAZEERA/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",ANTV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-ANTV/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",ARIRANG
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-ARIRANG/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",AXN
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-AXN/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",BALI TV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-BALITV/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",BTV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-BERITASATU/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",CARTOON NETWORK
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-CARTOONNETWORK/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",CARTOONITO
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-CARTOONITO/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",CCTV 4 ASIA
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-CCTV4/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",CELESTIAL MOVIES
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-CELESTIALMOVIES/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",CGTN
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-CGTN/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",CGTN DOCUMENTARY
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-CGTNDOC/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",CINEMAWORLD
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-CINEMAWORLD/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",CINEMAX
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-CINEMAX/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",CNA
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-CNA/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",CNN INDONESIA
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-CNNINDONESIA/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",DAAI TV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-DAAITV/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",DW ENGLISH
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-DWENGLISH/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",EAT & GO
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-EATNGO/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",EURONEWS.
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-EURONEWS/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",FASHION TV SOUTHEAST ASIA
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-FASHIONTV/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",FIGHT TV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-FIGHTSPORTS/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",FRANCE 24
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-FRANCE24/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",GAMING TV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-GAMINGTV/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",GOLF PLUS ID
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-GOLF/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",GTV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-GLOBALTV/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",HBO
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-HBO/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",HBO FAMILY
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-HBOFAMILY/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",HBO HITS
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-HBOHITS/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",INDOSIAR
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-INDOSIAR/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",!NSERT
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-INSERT/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",KBS WORLD
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-KBSWORLD/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",KNOWLEDGE+
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-KNOWLEDGE/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",KOMPAS TV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-KOMPASTV/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",MDTV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-NET/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",METRO TV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-METROTV/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",MNCTV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-MNCTV/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",MUSIK INDONESIA
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-MUSIKINDONESIA/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",NHK WORLD JAPAN
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-NHKWORLD/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",NHK WORLD PREMIUM
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-NHKPREMIUM/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",RCTI
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-RCTI/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",RTV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-RAJAWALITV/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",SCTV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-SCTV/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",SPORTS TV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-SPORTSTV/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",THRILL
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-THRILL/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",TRANS 7
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-TRANS7/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",TRANS TV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-TRANSTV/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",TV5 MONDE
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-TV5MONDE/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",TVN
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-TVN/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",TVN MOVIES
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-TVNMOVIES/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",TV ONE
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-TVONE/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",TVRI NASIONAL
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-TVRI/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",TVRI SPORT
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-TVRISPORT/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",WARNER BROS.TV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+http://103.58.160.157:8278/720-WARNERTV/playlist.m3u8
