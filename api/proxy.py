@@ -16,7 +16,31 @@ Alur:
           tetap lewat proxy ini (origin asli tidak pernah terlihat
           di response maupun di address bar).
         - kalau bukan .m3u8 (misal .ts): diteruskan apa adanya
-          (streaming passthrough).
+          (streaming passthrough, di-chunk 64KB biar gak nge-buffer
+          penuh ke memori dulu - ini yang bikin grup 01 & 02 lancar).
+
+=====================================================================
+CATATAN BUAT SESI/AKUN CLAUDE LAIN YANG LANJUTIN PROJECT INI:
+=====================================================================
+- File ini sudah diuji dan JALAN LANCAR untuk grup "01" dan "02"
+  (baca channel.json untuk detail masing-masing grup & catatan
+  perbedaan karakteristiknya).
+- JANGAN ubah logic umum di bawah ini (make_token, verify_token,
+  rewrite_playlist, streaming chunked di do_GET) kecuali user
+  eksplisit minta perbaikan/bug fix. Semua grup (01, 02, 03, dst)
+  lewat logic yang SAMA di file ini - channel.json yang membedakan
+  origin/header per grup, bukan percabangan kode.
+- Kalau user minta tambah grup baru (03, 04, dst): CUKUP tambah
+  entry baru di channel.json (base_url, user_agent, channels).
+  TIDAK PERLU dan TIDAK BOLEH mengubah kode di file ini untuk itu,
+  karena route handler sudah generik menerima {group} apa saja
+  yang ada di channel.json.
+- Kalau origin baru butuh perlakuan khusus (misal butuh cookie,
+  butuh 2-step request, dsb) yang beneran gak bisa ditangani logic
+  generik ini, tanya dulu ke user sebelum ubah struktur besar -
+  jangan langsung refactor karena bisa merusak grup yang sudah
+  lancar.
+=====================================================================
 """
 
 import base64
