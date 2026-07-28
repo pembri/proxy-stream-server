@@ -1,4 +1,13 @@
 {
+  "_readme": [
+    "JANGAN OTAK-ATIK isi grup 01 dan 02 di bawah ini - keduanya sudah diuji dan jalan lancar.",
+    "Grup 01 (103.148.44.38) & grup 02 (103.58.160.157) punya karakteristik beda: grup 01 lebih rawan buffering, grup 02 lancar. Jangan samakan/gabung logic keduanya.",
+    "Kalau nambah sumber baru: tambah key grup baru (contoh: \"03\") dengan format sama persis (base_url, user_agent, channels), JANGAN ubah/hapus/rename key \"01\" atau \"02\".",
+    "user_agent: isi null kalau origin tidak perlu UA khusus (kayak grup 01), atau isi string UA kalau origin butuh (kayak grup 02).",
+    "channels: mapping slug (huruf kecil, spasi jadi '-') -> path relatif dari base_url. Slug harus SAMA di semua grup kalau channel-nya sama (contoh: tvri di 01 & 02 sama-sama pakai slug 'tvri', bukan 'tvri-nasional').",
+    "Kalau ada 2 channel nama sama dalam 1 grup, slug kedua dan seterusnya dikasih akhiran -2, -3, dst (contoh: pbs-kids, pbs-kids-2).",
+    "Key '_readme' ini cuma catatan, aman diabaikan program (proxy.py tidak baca key ini)."
+  ],
   "01": {
     "base_url": "http://103.148.44.38:8001",
     "user_agent": null,
