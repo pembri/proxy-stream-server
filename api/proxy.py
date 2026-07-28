@@ -91,9 +91,12 @@ def get_channel_origin(group, slug):
     grp = CHANNELS.get(group)
     if not grp:
         return None, None
-    rel = grp.get("channels", {}).get(slug)
-    if not rel:
+    entry = grp.get("channels", {}).get(slug)
+    if not entry:
         return None, None
+    # entry = {"path": "...", "name": "..."} - "name" cuma dipakai generator
+    # playlist (scripts/generate_playlists.py), diabaikan di sini.
+    rel = entry["path"] if isinstance(entry, dict) else entry
     return grp["base_url"] + rel, grp.get("user_agent")
 
 
