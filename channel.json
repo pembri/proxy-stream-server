@@ -4,124 +4,437 @@
     "Grup 01 (103.148.44.38) & grup 02 (103.58.160.157) punya karakteristik beda: grup 01 lebih rawan buffering, grup 02 lancar. Jangan samakan/gabung logic keduanya.",
     "Kalau nambah sumber baru: tambah key grup baru (contoh: \"03\") dengan format sama persis (base_url, user_agent, channels), JANGAN ubah/hapus/rename key \"01\" atau \"02\".",
     "user_agent: isi null kalau origin tidak perlu UA khusus (kayak grup 01), atau isi string UA kalau origin butuh (kayak grup 02).",
-    "channels: mapping slug (huruf kecil, spasi jadi '-') -> path relatif dari base_url. Slug harus SAMA di semua grup kalau channel-nya sama (contoh: tvri di 01 & 02 sama-sama pakai slug 'tvri', bukan 'tvri-nasional').",
+    "channels: mapping slug (huruf kecil, spasi jadi '-') -> {path, name}. 'path' = path relatif dari base_url (dibaca proxy.py). 'name' = nama tampilan buat judul di playlist (dibaca scripts/generate_playlists.py, TIDAK dibaca proxy.py).",
+    "Slug harus SAMA di semua grup kalau channel-nya sama (contoh: tvri di 01 & 02 sama-sama pakai slug 'tvri', bukan 'tvri-nasional').",
     "Kalau ada 2 channel nama sama dalam 1 grup, slug kedua dan seterusnya dikasih akhiran -2, -3, dst (contoh: pbs-kids, pbs-kids-2).",
-    "Key '_readme' ini cuma catatan, aman diabaikan program (proxy.py tidak baca key ini)."
+    "Key '_readme' ini cuma catatan, aman diabaikan program."
   ],
   "01": {
     "base_url": "http://103.148.44.38:8001",
     "user_agent": null,
     "channels": {
-      "aniplus": "/play/a001/index.m3u8",
-      "animax": "/play/a002/index.m3u8",
-      "max-reels": "/play/a003/index.m3u8",
-      "metro-tv": "/play/a004/index.m3u8",
-      "celestial-movies": "/play/a005/index.m3u8",
-      "dragon-tv": "/play/a007/index.m3u8",
-      "hbo": "/play/a009/index.m3u8",
-      "cnn-indonesia": "/play/a010/index.m3u8",
-      "kompas-tv": "/play/a011/index.m3u8",
-      "axn": "/play/a013/index.m3u8",
-      "moji-tv": "/play/a014/index.m3u8",
-      "nick-jr": "/play/a015/index.m3u8",
-      "rtv": "/play/a017/index.m3u8",
-      "spotv-2": "/play/a018/index.m3u8",
-      "trans-7": "/play/a019/index.m3u8",
-      "tvone": "/play/a020/index.m3u8",
-      "tvri": "/play/a021/index.m3u8",
-      "vtv": "/play/a023/index.m3u8",
-      "hbo-family": "/play/a024/index.m3u8",
-      "nusantara-tv": "/play/a025/index.m3u8",
-      "ktv": "/play/a026/index.m3u8",
-      "tvri-sport": "/play/a027/index.m3u8",
-      "cnbc-indonesia": "/play/a028/index.m3u8",
-      "wof-sport": "/play/a030/index.m3u8",
-      "tvn": "/play/a032/index.m3u8",
-      "redbull": "/play/a035/index.m3u8",
-      "pbs-kids": "/play/a039/index.m3u8",
-      "pbs-kids-2": "/play/a040/index.m3u8",
-      "nickelodeon": "/play/a041/index.m3u8",
-      "outdoor": "/play/a042/index.m3u8",
-      "mdtv": "/play/a044/index.m3u8",
-      "flik": "/play/a045/index.m3u8",
-      "magna-channel": "/play/a046/index.m3u8",
-      "cinemax": "/play/a047/index.m3u8",
-      "kix": "/play/a048/index.m3u8",
-      "kbs-world": "/play/a049/index.m3u8",
-      "hbo-signature": "/play/a051/index.m3u8",
-      "zoo-moo": "/play/a052/index.m3u8",
-      "formosa-tv": "/play/a053/index.m3u8",
-      "galaxy-premium": "/play/a054/index.m3u8",
-      "formosa-tv-2": "/play/a057/index.m3u8",
-      "tvn-movies": "/play/a058/index.m3u8",
-      "tvbs": "/play/a059/index.m3u8",
-      "rock-entertainment": "/play/a060/index.m3u8",
-      "bloomberg-tv": "/play/a062/index.m3u8",
-      "galaxy": "/play/a063/index.m3u8",
-      "trans-tv": "/play/a064/index.m3u8",
-      "cna": "/play/a065/index.m3u8",
-      "hits": "/play/a09x/index.m3u8"
+      "aniplus": {
+        "path": "/play/a001/index.m3u8",
+        "name": "Aniplus"
+      },
+      "animax": {
+        "path": "/play/a002/index.m3u8",
+        "name": "Animax"
+      },
+      "max-reels": {
+        "path": "/play/a003/index.m3u8",
+        "name": "MAX Reels"
+      },
+      "metro-tv": {
+        "path": "/play/a004/index.m3u8",
+        "name": "Metro TV"
+      },
+      "celestial-movies": {
+        "path": "/play/a005/index.m3u8",
+        "name": "Celestial Movies"
+      },
+      "dragon-tv": {
+        "path": "/play/a007/index.m3u8",
+        "name": "Dragon TV"
+      },
+      "hbo": {
+        "path": "/play/a009/index.m3u8",
+        "name": "HBO"
+      },
+      "cnn-indonesia": {
+        "path": "/play/a010/index.m3u8",
+        "name": "CNN Indonesia"
+      },
+      "kompas-tv": {
+        "path": "/play/a011/index.m3u8",
+        "name": "Kompas TV"
+      },
+      "axn": {
+        "path": "/play/a013/index.m3u8",
+        "name": "AXN"
+      },
+      "moji-tv": {
+        "path": "/play/a014/index.m3u8",
+        "name": "Moji TV"
+      },
+      "nick-jr": {
+        "path": "/play/a015/index.m3u8",
+        "name": "Nick JR"
+      },
+      "rtv": {
+        "path": "/play/a017/index.m3u8",
+        "name": "RTV"
+      },
+      "spotv-2": {
+        "path": "/play/a018/index.m3u8",
+        "name": "SPOTV 2"
+      },
+      "trans-7": {
+        "path": "/play/a019/index.m3u8",
+        "name": "Trans 7"
+      },
+      "tvone": {
+        "path": "/play/a020/index.m3u8",
+        "name": "TVOne"
+      },
+      "tvri": {
+        "path": "/play/a021/index.m3u8",
+        "name": "TVRI"
+      },
+      "vtv": {
+        "path": "/play/a023/index.m3u8",
+        "name": "VTV"
+      },
+      "hbo-family": {
+        "path": "/play/a024/index.m3u8",
+        "name": "HBO Family"
+      },
+      "nusantara-tv": {
+        "path": "/play/a025/index.m3u8",
+        "name": "Nusantara TV"
+      },
+      "ktv": {
+        "path": "/play/a026/index.m3u8",
+        "name": "KTV"
+      },
+      "tvri-sport": {
+        "path": "/play/a027/index.m3u8",
+        "name": "TVRI Sport"
+      },
+      "cnbc-indonesia": {
+        "path": "/play/a028/index.m3u8",
+        "name": "CNBC Indonesia"
+      },
+      "wof-sport": {
+        "path": "/play/a030/index.m3u8",
+        "name": "WOF Sport"
+      },
+      "tvn": {
+        "path": "/play/a032/index.m3u8",
+        "name": "TVN"
+      },
+      "redbull": {
+        "path": "/play/a035/index.m3u8",
+        "name": "Redbull"
+      },
+      "pbs-kids": {
+        "path": "/play/a039/index.m3u8",
+        "name": "PBS Kids"
+      },
+      "pbs-kids-2": {
+        "path": "/play/a040/index.m3u8",
+        "name": "PBS Kids"
+      },
+      "nickelodeon": {
+        "path": "/play/a041/index.m3u8",
+        "name": "Nickelodeon"
+      },
+      "outdoor": {
+        "path": "/play/a042/index.m3u8",
+        "name": "Outdoor"
+      },
+      "mdtv": {
+        "path": "/play/a044/index.m3u8",
+        "name": "MDTV"
+      },
+      "flik": {
+        "path": "/play/a045/index.m3u8",
+        "name": "Flik"
+      },
+      "magna-channel": {
+        "path": "/play/a046/index.m3u8",
+        "name": "Magna Channel"
+      },
+      "cinemax": {
+        "path": "/play/a047/index.m3u8",
+        "name": "Cinemax"
+      },
+      "kix": {
+        "path": "/play/a048/index.m3u8",
+        "name": "KIX"
+      },
+      "kbs-world": {
+        "path": "/play/a049/index.m3u8",
+        "name": "KBS World"
+      },
+      "hbo-signature": {
+        "path": "/play/a051/index.m3u8",
+        "name": "HBO Signature"
+      },
+      "zoo-moo": {
+        "path": "/play/a052/index.m3u8",
+        "name": "Zoo Moo"
+      },
+      "formosa-tv": {
+        "path": "/play/a053/index.m3u8",
+        "name": "Formosa TV"
+      },
+      "galaxy-premium": {
+        "path": "/play/a054/index.m3u8",
+        "name": "Galaxy Premium"
+      },
+      "formosa-tv-2": {
+        "path": "/play/a057/index.m3u8",
+        "name": "Formosa TV"
+      },
+      "tvn-movies": {
+        "path": "/play/a058/index.m3u8",
+        "name": "TVN Movies"
+      },
+      "tvbs": {
+        "path": "/play/a059/index.m3u8",
+        "name": "TVBS"
+      },
+      "rock-entertainment": {
+        "path": "/play/a060/index.m3u8",
+        "name": "Rock Entertainment"
+      },
+      "bloomberg-tv": {
+        "path": "/play/a062/index.m3u8",
+        "name": "Bloomberg TV"
+      },
+      "galaxy": {
+        "path": "/play/a063/index.m3u8",
+        "name": "Galaxy"
+      },
+      "trans-tv": {
+        "path": "/play/a064/index.m3u8",
+        "name": "Trans TV"
+      },
+      "cna": {
+        "path": "/play/a065/index.m3u8",
+        "name": "CNA"
+      },
+      "hits": {
+        "path": "/play/a09x/index.m3u8",
+        "name": "HITS"
+      }
     }
   },
   "02": {
     "base_url": "http://103.58.160.157:8278",
     "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
     "channels": {
-      "trans-tv": "/720-TRANSTV/playlist.m3u8",
-      "trans-7": "/720-TRANS7/playlist.m3u8",
-      "cnn-indonesia": "/720-CNNINDONESIA/playlist.m3u8",
-      "tvone": "/720-TVONE/playlist.m3u8",
-      "antv": "/720-ANTV/playlist.m3u8",
-      "sctv": "/720-SCTV/playlist.m3u8",
-      "indosiar": "/720-INDOSIAR/playlist.m3u8",
-      "mdtv": "/720-NET/playlist.m3u8",
-      "rtv": "/720-RAJAWALITV/playlist.m3u8",
-      "rcti": "/720-RCTI/playlist.m3u8",
-      "mnctv": "/720-MNCTV/playlist.m3u8",
-      "gtv": "/720-GLOBALTV/playlist.m3u8",
-      "kompas-tv": "/720-KOMPASTV/playlist.m3u8",
-      "metro-tv": "/720-METROTV/playlist.m3u8",
-      "bali-tv": "/720-BALITV/playlist.m3u8",
-      "tvri": "/720-TVRI/playlist.m3u8",
-      "tvri-sport": "/720-TVRISPORT/playlist.m3u8",
-      "daai-tv": "/720-DAAITV/playlist.m3u8",
-      "btv": "/720-BERITASATU/playlist.m3u8",
-      "eat-and-go": "/720-EATNGO/playlist.m3u8",
-      "insert": "/720-INSERT/playlist.m3u8",
-      "musik-indonesia": "/720-MUSIKINDONESIA/playlist.m3u8",
-      "knowledge+": "/720-KNOWLEDGE/playlist.m3u8",
-      "golf-plus-id": "/720-GOLF/playlist.m3u8",
-      "gaming-tv": "/720-GAMINGTV/playlist.m3u8",
-      "fight-tv": "/720-FIGHTSPORTS/playlist.m3u8",
-      "sports-tv": "/720-SPORTSTV/playlist.m3u8",
-      "cna": "/720-CNA/playlist.m3u8",
-      "celestial-movies": "/720-CELESTIALMOVIES/playlist.m3u8",
-      "thrill": "/720-THRILL/playlist.m3u8",
-      "cinemaworld": "/720-CINEMAWORLD/playlist.m3u8",
-      "cctv-4-asia": "/720-CCTV4/playlist.m3u8",
-      "cgtn": "/720-CGTN/playlist.m3u8",
-      "cgtn-documentary": "/720-CGTNDOC/playlist.m3u8",
-      "nhk-world-japan": "/720-NHKWORLD/playlist.m3u8",
-      "nhk-world-premium": "/720-NHKPREMIUM/playlist.m3u8",
-      "arirang": "/720-ARIRANG/playlist.m3u8",
-      "tvn": "/720-TVN/playlist.m3u8",
-      "tvn-movies": "/720-TVNMOVIES/playlist.m3u8",
-      "kbs-world": "/720-KBSWORLD/playlist.m3u8",
-      "axn": "/720-AXN/playlist.m3u8",
-      "aljazeera-english": "/720-ALJAZEERA/playlist.m3u8",
-      "abc-australia": "/720-ABCAUSTRALIA/playlist.m3u8",
-      "dw-english": "/720-DWENGLISH/playlist.m3u8",
-      "euronews.": "/720-EURONEWS/playlist.m3u8",
-      "tv5-monde": "/720-TV5MONDE/playlist.m3u8",
-      "france-24": "/720-FRANCE24/playlist.m3u8",
-      "fashion-tv-southeast-asia": "/720-FASHIONTV/playlist.m3u8",
-      "warner-bros.tv": "/720-WARNERTV/playlist.m3u8",
-      "hbo": "/720-HBO/playlist.m3u8",
-      "hbo-hits": "/720-HBOHITS/playlist.m3u8",
-      "hbo-family": "/720-HBOFAMILY/playlist.m3u8",
-      "cinemax": "/720-CINEMAX/playlist.m3u8",
-      "cartoon-network": "/720-CARTOONNETWORK/playlist.m3u8",
-      "cartoonito": "/720-CARTOONITO/playlist.m3u8"
+      "trans-tv": {
+        "path": "/720-TRANSTV/playlist.m3u8",
+        "name": "TRANS TV"
+      },
+      "trans-7": {
+        "path": "/720-TRANS7/playlist.m3u8",
+        "name": "TRANS 7"
+      },
+      "cnn-indonesia": {
+        "path": "/720-CNNINDONESIA/playlist.m3u8",
+        "name": "CNN INDONESIA"
+      },
+      "tvone": {
+        "path": "/720-TVONE/playlist.m3u8",
+        "name": "TV ONE"
+      },
+      "antv": {
+        "path": "/720-ANTV/playlist.m3u8",
+        "name": "ANTV"
+      },
+      "sctv": {
+        "path": "/720-SCTV/playlist.m3u8",
+        "name": "SCTV"
+      },
+      "indosiar": {
+        "path": "/720-INDOSIAR/playlist.m3u8",
+        "name": "INDOSIAR"
+      },
+      "mdtv": {
+        "path": "/720-NET/playlist.m3u8",
+        "name": "MDTV"
+      },
+      "rtv": {
+        "path": "/720-RAJAWALITV/playlist.m3u8",
+        "name": "RTV"
+      },
+      "rcti": {
+        "path": "/720-RCTI/playlist.m3u8",
+        "name": "RCTI"
+      },
+      "mnctv": {
+        "path": "/720-MNCTV/playlist.m3u8",
+        "name": "MNCTV"
+      },
+      "gtv": {
+        "path": "/720-GLOBALTV/playlist.m3u8",
+        "name": "GTV"
+      },
+      "kompas-tv": {
+        "path": "/720-KOMPASTV/playlist.m3u8",
+        "name": "KOMPAS TV"
+      },
+      "metro-tv": {
+        "path": "/720-METROTV/playlist.m3u8",
+        "name": "METRO TV"
+      },
+      "bali-tv": {
+        "path": "/720-BALITV/playlist.m3u8",
+        "name": "BALI TV"
+      },
+      "tvri": {
+        "path": "/720-TVRI/playlist.m3u8",
+        "name": "TVRI NASIONAL"
+      },
+      "tvri-sport": {
+        "path": "/720-TVRISPORT/playlist.m3u8",
+        "name": "TVRI SPORT"
+      },
+      "daai-tv": {
+        "path": "/720-DAAITV/playlist.m3u8",
+        "name": "DAAI TV"
+      },
+      "btv": {
+        "path": "/720-BERITASATU/playlist.m3u8",
+        "name": "BTV"
+      },
+      "eat-and-go": {
+        "path": "/720-EATNGO/playlist.m3u8",
+        "name": "EAT & GO"
+      },
+      "insert": {
+        "path": "/720-INSERT/playlist.m3u8",
+        "name": "!NSERT"
+      },
+      "musik-indonesia": {
+        "path": "/720-MUSIKINDONESIA/playlist.m3u8",
+        "name": "MUSIK INDONESIA"
+      },
+      "knowledge+": {
+        "path": "/720-KNOWLEDGE/playlist.m3u8",
+        "name": "KNOWLEDGE+"
+      },
+      "golf-plus-id": {
+        "path": "/720-GOLF/playlist.m3u8",
+        "name": "GOLF PLUS ID"
+      },
+      "gaming-tv": {
+        "path": "/720-GAMINGTV/playlist.m3u8",
+        "name": "GAMING TV"
+      },
+      "fight-tv": {
+        "path": "/720-FIGHTSPORTS/playlist.m3u8",
+        "name": "FIGHT TV"
+      },
+      "sports-tv": {
+        "path": "/720-SPORTSTV/playlist.m3u8",
+        "name": "SPORTS TV"
+      },
+      "cna": {
+        "path": "/720-CNA/playlist.m3u8",
+        "name": "CNA"
+      },
+      "celestial-movies": {
+        "path": "/720-CELESTIALMOVIES/playlist.m3u8",
+        "name": "CELESTIAL MOVIES"
+      },
+      "thrill": {
+        "path": "/720-THRILL/playlist.m3u8",
+        "name": "THRILL"
+      },
+      "cinemaworld": {
+        "path": "/720-CINEMAWORLD/playlist.m3u8",
+        "name": "CINEMAWORLD"
+      },
+      "cctv-4-asia": {
+        "path": "/720-CCTV4/playlist.m3u8",
+        "name": "CCTV 4 ASIA"
+      },
+      "cgtn": {
+        "path": "/720-CGTN/playlist.m3u8",
+        "name": "CGTN"
+      },
+      "cgtn-documentary": {
+        "path": "/720-CGTNDOC/playlist.m3u8",
+        "name": "CGTN DOCUMENTARY"
+      },
+      "nhk-world-japan": {
+        "path": "/720-NHKWORLD/playlist.m3u8",
+        "name": "NHK WORLD JAPAN"
+      },
+      "nhk-world-premium": {
+        "path": "/720-NHKPREMIUM/playlist.m3u8",
+        "name": "NHK WORLD PREMIUM"
+      },
+      "arirang": {
+        "path": "/720-ARIRANG/playlist.m3u8",
+        "name": "ARIRANG"
+      },
+      "tvn": {
+        "path": "/720-TVN/playlist.m3u8",
+        "name": "TVN"
+      },
+      "tvn-movies": {
+        "path": "/720-TVNMOVIES/playlist.m3u8",
+        "name": "TVN MOVIES"
+      },
+      "kbs-world": {
+        "path": "/720-KBSWORLD/playlist.m3u8",
+        "name": "KBS WORLD"
+      },
+      "axn": {
+        "path": "/720-AXN/playlist.m3u8",
+        "name": "AXN"
+      },
+      "aljazeera-english": {
+        "path": "/720-ALJAZEERA/playlist.m3u8",
+        "name": "ALJAZEERA ENGLISH"
+      },
+      "abc-australia": {
+        "path": "/720-ABCAUSTRALIA/playlist.m3u8",
+        "name": "ABC AUSTRALIA"
+      },
+      "dw-english": {
+        "path": "/720-DWENGLISH/playlist.m3u8",
+        "name": "DW ENGLISH"
+      },
+      "euronews.": {
+        "path": "/720-EURONEWS/playlist.m3u8",
+        "name": "EURONEWS."
+      },
+      "tv5-monde": {
+        "path": "/720-TV5MONDE/playlist.m3u8",
+        "name": "TV5 MONDE"
+      },
+      "france-24": {
+        "path": "/720-FRANCE24/playlist.m3u8",
+        "name": "FRANCE 24"
+      },
+      "fashion-tv-southeast-asia": {
+        "path": "/720-FASHIONTV/playlist.m3u8",
+        "name": "FASHION TV SOUTHEAST ASIA"
+      },
+      "warner-bros.tv": {
+        "path": "/720-WARNERTV/playlist.m3u8",
+        "name": "WARNER BROS.TV"
+      },
+      "hbo": {
+        "path": "/720-HBO/playlist.m3u8",
+        "name": "HBO"
+      },
+      "hbo-hits": {
+        "path": "/720-HBOHITS/playlist.m3u8",
+        "name": "HBO HITS"
+      },
+      "hbo-family": {
+        "path": "/720-HBOFAMILY/playlist.m3u8",
+        "name": "HBO FAMILY"
+      },
+      "cinemax": {
+        "path": "/720-CINEMAX/playlist.m3u8",
+        "name": "CINEMAX"
+      },
+      "cartoon-network": {
+        "path": "/720-CARTOONNETWORK/playlist.m3u8",
+        "name": "CARTOON NETWORK"
+      },
+      "cartoonito": {
+        "path": "/720-CARTOONITO/playlist.m3u8",
+        "name": "CARTOONITO"
+      }
     }
   }
 }
