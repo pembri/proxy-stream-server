@@ -7,7 +7,8 @@
     "channels: mapping slug (huruf kecil, spasi jadi '-') -> {path, name}. 'path' = path relatif dari base_url (dibaca proxy.py). 'name' = nama tampilan buat judul di playlist (dibaca scripts/generate_playlists.py, TIDAK dibaca proxy.py).",
     "Slug harus SAMA di semua grup kalau channel-nya sama (contoh: tvri di 01 & 02 sama-sama pakai slug 'tvri', bukan 'tvri-nasional').",
     "Kalau ada 2 channel nama sama dalam 1 grup, slug kedua dan seterusnya dikasih akhiran -2, -3, dst (contoh: pbs-kids, pbs-kids-2).",
-    "Key '_readme' ini cuma catatan, aman diabaikan program."
+    "Key '_readme' ini cuma catatan, aman diabaikan program.",
+    "UPDATE: grup 02 sudah diganti total (sumber lama 103.58.160.157 mati). Sumber baru per-channel beda domain (cdn-server-rctiplus.vidiraplay.biz.id & cdn-transmedia-server.vidiraplay.biz.id), makanya base_url grup 02 dikosongkan (\"\") dan tiap channel pakai URL absolute penuh di field 'path'. Ini valid dan tidak butuh perubahan proxy.py (base_url + path = \"\" + full_url = full_url)."
   ],
   "01": {
     "base_url": "http://103.148.44.38:8001",
@@ -212,228 +213,40 @@
     }
   },
   "02": {
-    "base_url": "http://103.58.160.157:8278",
-    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
+    "base_url": "",
+    "user_agent": null,
     "channels": {
-      "trans-tv": {
-        "path": "/720-TRANSTV/playlist.m3u8",
-        "name": "TRANS TV"
-      },
-      "trans-7": {
-        "path": "/720-TRANS7/playlist.m3u8",
-        "name": "TRANS 7"
-      },
-      "cnn-indonesia": {
-        "path": "/720-CNNINDONESIA/playlist.m3u8",
-        "name": "CNN INDONESIA"
-      },
-      "tvone": {
-        "path": "/720-TVONE/playlist.m3u8",
-        "name": "TV ONE"
-      },
-      "antv": {
-        "path": "/720-ANTV/playlist.m3u8",
-        "name": "ANTV"
-      },
-      "sctv": {
-        "path": "/720-SCTV/playlist.m3u8",
-        "name": "SCTV"
-      },
-      "indosiar": {
-        "path": "/720-INDOSIAR/playlist.m3u8",
-        "name": "INDOSIAR"
-      },
-      "mdtv": {
-        "path": "/720-NET/playlist.m3u8",
-        "name": "MDTV"
-      },
-      "rtv": {
-        "path": "/720-RAJAWALITV/playlist.m3u8",
-        "name": "RTV"
-      },
       "rcti": {
-        "path": "/720-RCTI/playlist.m3u8",
+        "path": "https://cdn-server-rctiplus.vidiraplay.biz.id/stream-hls/rcti/index.m3u8",
         "name": "RCTI"
       },
       "mnctv": {
-        "path": "/720-MNCTV/playlist.m3u8",
+        "path": "https://cdn-server-rctiplus.vidiraplay.biz.id/stream-hls/mnctv/index.m3u8",
         "name": "MNCTV"
       },
       "gtv": {
-        "path": "/720-GLOBALTV/playlist.m3u8",
+        "path": "https://cdn-server-rctiplus.vidiraplay.biz.id/stream-hls/gtv/index.m3u8",
         "name": "GTV"
       },
-      "kompas-tv": {
-        "path": "/720-KOMPASTV/playlist.m3u8",
-        "name": "KOMPAS TV"
+      "inews": {
+        "path": "https://cdn-server-rctiplus.vidiraplay.biz.id/stream-hls/inews/index.m3u8",
+        "name": "iNews"
       },
-      "metro-tv": {
-        "path": "/720-METROTV/playlist.m3u8",
-        "name": "METRO TV"
+      "trans-tv": {
+        "path": "https://cdn-transmedia-server.vidiraplay.biz.id/stream-hls/transtv/master.m3u8",
+        "name": "Trans TV"
       },
-      "bali-tv": {
-        "path": "/720-BALITV/playlist.m3u8",
-        "name": "BALI TV"
+      "trans-7": {
+        "path": "https://cdn-transmedia-server.vidiraplay.biz.id/stream-hls/trans7/master.m3u8",
+        "name": "Trans 7"
       },
-      "tvri": {
-        "path": "/720-TVRI/playlist.m3u8",
-        "name": "TVRI NASIONAL"
+      "cnn-indonesia": {
+        "path": "https://cdn-transmedia-server.vidiraplay.biz.id/stream-hls/cnn-indonesia/master.m3u8",
+        "name": "CNN Indonesia"
       },
-      "tvri-sport": {
-        "path": "/720-TVRISPORT/playlist.m3u8",
-        "name": "TVRI SPORT"
-      },
-      "daai-tv": {
-        "path": "/720-DAAITV/playlist.m3u8",
-        "name": "DAAI TV"
-      },
-      "btv": {
-        "path": "/720-BERITASATU/playlist.m3u8",
-        "name": "BTV"
-      },
-      "eat-and-go": {
-        "path": "/720-EATNGO/playlist.m3u8",
-        "name": "EAT & GO"
-      },
-      "insert": {
-        "path": "/720-INSERT/playlist.m3u8",
-        "name": "!NSERT"
-      },
-      "musik-indonesia": {
-        "path": "/720-MUSIKINDONESIA/playlist.m3u8",
-        "name": "MUSIK INDONESIA"
-      },
-      "knowledge+": {
-        "path": "/720-KNOWLEDGE/playlist.m3u8",
-        "name": "KNOWLEDGE+"
-      },
-      "golf-plus-id": {
-        "path": "/720-GOLF/playlist.m3u8",
-        "name": "GOLF PLUS ID"
-      },
-      "gaming-tv": {
-        "path": "/720-GAMINGTV/playlist.m3u8",
-        "name": "GAMING TV"
-      },
-      "fight-tv": {
-        "path": "/720-FIGHTSPORTS/playlist.m3u8",
-        "name": "FIGHT TV"
-      },
-      "sports-tv": {
-        "path": "/720-SPORTSTV/playlist.m3u8",
-        "name": "SPORTS TV"
-      },
-      "cna": {
-        "path": "/720-CNA/playlist.m3u8",
-        "name": "CNA"
-      },
-      "celestial-movies": {
-        "path": "/720-CELESTIALMOVIES/playlist.m3u8",
-        "name": "CELESTIAL MOVIES"
-      },
-      "thrill": {
-        "path": "/720-THRILL/playlist.m3u8",
-        "name": "THRILL"
-      },
-      "cinemaworld": {
-        "path": "/720-CINEMAWORLD/playlist.m3u8",
-        "name": "CINEMAWORLD"
-      },
-      "cctv-4-asia": {
-        "path": "/720-CCTV4/playlist.m3u8",
-        "name": "CCTV 4 ASIA"
-      },
-      "cgtn": {
-        "path": "/720-CGTN/playlist.m3u8",
-        "name": "CGTN"
-      },
-      "cgtn-documentary": {
-        "path": "/720-CGTNDOC/playlist.m3u8",
-        "name": "CGTN DOCUMENTARY"
-      },
-      "nhk-world-japan": {
-        "path": "/720-NHKWORLD/playlist.m3u8",
-        "name": "NHK WORLD JAPAN"
-      },
-      "nhk-world-premium": {
-        "path": "/720-NHKPREMIUM/playlist.m3u8",
-        "name": "NHK WORLD PREMIUM"
-      },
-      "arirang": {
-        "path": "/720-ARIRANG/playlist.m3u8",
-        "name": "ARIRANG"
-      },
-      "tvn": {
-        "path": "/720-TVN/playlist.m3u8",
-        "name": "TVN"
-      },
-      "tvn-movies": {
-        "path": "/720-TVNMOVIES/playlist.m3u8",
-        "name": "TVN MOVIES"
-      },
-      "kbs-world": {
-        "path": "/720-KBSWORLD/playlist.m3u8",
-        "name": "KBS WORLD"
-      },
-      "axn": {
-        "path": "/720-AXN/playlist.m3u8",
-        "name": "AXN"
-      },
-      "aljazeera-english": {
-        "path": "/720-ALJAZEERA/playlist.m3u8",
-        "name": "ALJAZEERA ENGLISH"
-      },
-      "abc-australia": {
-        "path": "/720-ABCAUSTRALIA/playlist.m3u8",
-        "name": "ABC AUSTRALIA"
-      },
-      "dw-english": {
-        "path": "/720-DWENGLISH/playlist.m3u8",
-        "name": "DW ENGLISH"
-      },
-      "euronews.": {
-        "path": "/720-EURONEWS/playlist.m3u8",
-        "name": "EURONEWS."
-      },
-      "tv5-monde": {
-        "path": "/720-TV5MONDE/playlist.m3u8",
-        "name": "TV5 MONDE"
-      },
-      "france-24": {
-        "path": "/720-FRANCE24/playlist.m3u8",
-        "name": "FRANCE 24"
-      },
-      "fashion-tv-southeast-asia": {
-        "path": "/720-FASHIONTV/playlist.m3u8",
-        "name": "FASHION TV SOUTHEAST ASIA"
-      },
-      "warner-bros.tv": {
-        "path": "/720-WARNERTV/playlist.m3u8",
-        "name": "WARNER BROS.TV"
-      },
-      "hbo": {
-        "path": "/720-HBO/playlist.m3u8",
-        "name": "HBO"
-      },
-      "hbo-hits": {
-        "path": "/720-HBOHITS/playlist.m3u8",
-        "name": "HBO HITS"
-      },
-      "hbo-family": {
-        "path": "/720-HBOFAMILY/playlist.m3u8",
-        "name": "HBO FAMILY"
-      },
-      "cinemax": {
-        "path": "/720-CINEMAX/playlist.m3u8",
-        "name": "CINEMAX"
-      },
-      "cartoon-network": {
-        "path": "/720-CARTOONNETWORK/playlist.m3u8",
-        "name": "CARTOON NETWORK"
-      },
-      "cartoonito": {
-        "path": "/720-CARTOONITO/playlist.m3u8",
-        "name": "CARTOONITO"
+      "cnbc-indonesia": {
+        "path": "https://cdn-transmedia-server.vidiraplay.biz.id/stream-hls/cnbc-indonesia/master.m3u8",
+        "name": "CNBC Indonesia"
       }
     }
   }
