@@ -1,0 +1,57 @@
+# .github/workflows/generate-playlists.yml
+#
+# Otomatis generate ulang playlist.m3u8 & playlist-original.m3u8
+# setiap kali channel.json atau channel_names.json berubah (nambah,
+# ubah, atau hapus channel/grup), lalu commit hasilnya balik ke repo.
+#
+# Setelah commit ini masuk, Vercel (yang connect ke repo GitHub ini)
+# otomatis redeploy, dan file playlist.m3u8 / playlist-original.m3u8
+# langsung bisa diakses sebagai static file di:
+#   https://proxy-stream-server.vidiraplay.biz.id/playlist.m3u8
+#   https://proxy-stream-server.vidiraplay.biz.id/playlist-original.m3u8
+#
+# CATATAN: workflow ini TIDAK menyentuh api/proxy.py atau logic proxy
+# sama sekali - cuma baca channel.json & channel_names.json, lalu
+# tulis ulang 2 file playlist di root repo.
+
+name: Generate Playlists
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "channel.json"
+      - "scripts/generate_playlists.py"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Generate playlist.m3u8 & playlist-original.m3u8
+        run: python3 scripts/generate_playlists.py
+
+      - name: Commit & push hasil generate (kalau ada perubahan)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add playlist.m3u8 playlist-original.m3u8
+          if git diff --cached --quiet; then
+            echo "Tidak ada perubahan pada playlist, skip commit."
+          else
+            git commit -m "chore: auto-generate playlist.m3u8 & playlist-original.m3u8 [skip ci]"
+            git push
+          fi
