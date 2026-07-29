@@ -122,9 +122,10 @@ def fetch_origin(url, user_agent=None):
         return resp.status, resp.read(), resp.headers.get("Content-Type", "")
 
 
-def rewrite_playlist(body_text, origin_url, group, slug, exp, token, user_agent):
+def rewrite_playlist(body_text, origin_url, group, slug, exp, token, user_agent, is_top_level=False):
     base = origin_url.rsplit("/", 1)[0] + "/"
     out_lines = []
+    idx = 0
     for line in body_text.splitlines():
         stripped = line.strip()
         if not stripped or stripped.startswith("#"):
@@ -145,9 +146,23 @@ def rewrite_playlist(body_text, origin_url, group, slug, exp, token, user_agent)
         path_only = abs_url.split("?", 1)[0].split("#", 1)[0]
         filename = "segment.ts" if not path_only.endswith(".m3u8") else "playlist.m3u8"
 
-        query = urllib.parse.urlencode({"exp": new_exp, "token": new_token, "u": u})
+        params = {"exp": new_exp, "token": new_token, "u": u}
+        if is_top_level:
+            # Baris ini adalah entri variant dari MASTER playlist asli
+            # (channel.json). Beberapa origin (misal 103.148.44.38 di
+            # grup 01) menerbitkan nama file variant BARU & SEKALI-PAKAI
+            # tiap kali master di-fetch ulang - link yang sudah diresolve
+            # bisa basi cuma dalam hitungan detik. "idx" = posisi variant
+            # ini di master (urutan ke berapa, 0-based, di antara baris
+            # non-# saja) supaya kalau link ini basi (404), _serve_live
+            # bisa fetch ulang master fresh dan ambil variant di posisi
+            # yang sama, lalu retry sekali - generik buat semua grup,
+            # cuma jalan kalau memang origin butuh (lihat _serve_live).
+            params["idx"] = idx
+        query = urllib.parse.urlencode(params)
         proxied = f"/stream/live/{group}/{slug}/{filename}?{query}"
         out_lines.append(proxied)
+        idx += 1
     return "\n".join(out_lines)
 
 
@@ -186,18 +201,49 @@ class handler(BaseHTTPRequestHandler):
                 return self._send(404, "Channel tidak ditemukan")
             exp = int(time.time()) + TOKEN_TTL_SECONDS
             token = make_token(group, slug, exp, "")
-            return self._serve_live(group, slug, exp, token, "")
+            return self._serve_live(group, slug, exp, token, "", idx=None)
 
         # --- Route B: URL final (dengan token) ---
-        # /stream/live/{group}/{slug}/{file}?exp=...&token=...&u=...
+        # /stream/live/{group}/{slug}/{file}?exp=...&token=...&u=...[&idx=...]
         if len(parts) >= 5 and parts[0] == "stream" and parts[1] == "live":
             group, slug = parts[2], parts[3]
             exp = qs.get("exp", [None])[0]
             token = qs.get("token", [None])[0]
             u = qs.get("u", [""])[0]
-            return self._serve_live(group, slug, exp, token, u)
+            idx_raw = qs.get("idx", [None])[0]
+            idx = int(idx_raw) if idx_raw is not None else None
+            return self._serve_live(group, slug, exp, token, u, idx=idx)
 
-    def _serve_live(self, group, slug, exp, token, u):
+    def _reresolve_and_retry(self, group, slug, idx, user_agent):
+        """Fetch ulang master ASLI channel ini dari channel.json (fresh,
+        bukan dari cache/token lama), ambil baris variant ke-idx (0-based,
+        di antara baris non-# saja), resolve jadi absolute URL, lalu fetch
+        isinya. Return (status, body, ctype) kalau berhasil, None kalau
+        gagal (supaya caller fallback ke error seperti biasa)."""
+        try:
+            master_origin_url, _ = get_channel_origin(group, slug)
+            if not master_origin_url:
+                return None
+            m_status, m_body, m_ctype = fetch_origin(master_origin_url, user_agent)
+            base = master_origin_url.rsplit("/", 1)[0] + "/"
+            text = m_body.decode("utf-8", errors="ignore")
+            count = 0
+            fresh_abs_url = None
+            for line in text.splitlines():
+                stripped = line.strip()
+                if not stripped or stripped.startswith("#"):
+                    continue
+                if count == idx:
+                    fresh_abs_url = urllib.parse.urljoin(base, stripped)
+                    break
+                count += 1
+            if not fresh_abs_url:
+                return None
+            return fetch_origin(fresh_abs_url, user_agent)
+        except Exception:
+            return None
+
+    def _serve_live(self, group, slug, exp, token, u, idx=None):
         """Logic inti serve konten (dulu = Route B). Dipanggil langsung dari
         entry point (Route A, tanpa redirect) maupun dari URL /stream/live/...
         yang muncul di dalam playlist hasil rewrite (sub-playlist, segmen)."""
@@ -205,6 +251,7 @@ class handler(BaseHTTPRequestHandler):
             return self._send(403, "Token tidak valid atau sudah kedaluwarsa")
 
         user_agent = get_group_ua(group)
+        is_top_level = u == ""  # dipanggil dari Route A (entry point) = master asli
 
         if u:
             origin_url = decode_u(u)
@@ -219,11 +266,23 @@ class handler(BaseHTTPRequestHandler):
             try:
                 status, body, ctype = fetch_origin(origin_url, user_agent)
             except urllib.error.HTTPError as e:
-                return self._send(e.code, f"Upstream error {e.code}")
+                if e.code == 404 and idx is not None:
+                    # Link variant ini kemungkinan basi (origin menerbitkan
+                    # nama file baru & sekali-pakai tiap master di-fetch -
+                    # lihat catatan di rewrite_playlist). Coba re-resolve:
+                    # fetch ulang master ASLI dari channel.json, ambil
+                    # variant di posisi "idx" yang sama, retry sekali.
+                    retried = self._reresolve_and_retry(group, slug, idx, user_agent)
+                    if retried is not None:
+                        status, body, ctype = retried
+                    else:
+                        return self._send(e.code, f"Upstream error {e.code}")
+                else:
+                    return self._send(e.code, f"Upstream error {e.code}")
             except Exception as e:
                 return self._send(502, f"Gagal fetch origin: {e}")
             text = body.decode("utf-8", errors="ignore")
-            rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent)
+            rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent, is_top_level=is_top_level)
             return self._send(200, rewritten, "application/vnd.apple.mpegurl")
 
         # Segmen (.ts dll) -> stream langsung, tidak dibuffer penuh ke
