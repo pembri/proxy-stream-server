@@ -107,34 +107,12 @@ def get_group_ua(group):
 
 DEFAULT_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 CHUNK_SIZE = 65536  # 64KB
-RETRY_ATTEMPTS = 3   # total percobaan (1 asli + 2 retry)
-RETRY_DELAY = 0.4    # jeda antar percobaan (detik)
 
 
 def open_origin(url, user_agent=None, timeout=20):
-    # Retry generik dipakai SEMUA grup - kalau origin sukses di percobaan
-    # pertama (kasus normal), perilakunya identik dengan sebelumnya, tidak
-    # ada delay/perubahan apa pun. Retry cuma jalan kalau origin gagal
-    # dengan error yang sifatnya transient (5xx, timeout, koneksi putus).
-    # 4xx (403/404 dst) TIDAK di-retry karena itu biasanya error permanen
-    # (channel tidak ada, token ditolak permanen, dst) - retry ulang gak
-    # akan mengubah hasil, cuma buang-buang waktu.
-    last_error = None
-    for attempt in range(1, RETRY_ATTEMPTS + 1):
-        try:
-            req = urllib.request.Request(url)
-            req.add_header("User-Agent", user_agent or DEFAULT_UA)
-            return urllib.request.urlopen(req, timeout=timeout)
-        except urllib.error.HTTPError as e:
-            if e.code < 500 or attempt == RETRY_ATTEMPTS:
-                raise
-            last_error = e
-        except Exception as e:
-            if attempt == RETRY_ATTEMPTS:
-                raise
-            last_error = e
-        time.sleep(RETRY_DELAY)
-    raise last_error
+    req = urllib.request.Request(url)
+    req.add_header("User-Agent", user_agent or DEFAULT_UA)
+    return urllib.request.urlopen(req, timeout=timeout)
 
 
 def fetch_origin(url, user_agent=None):
