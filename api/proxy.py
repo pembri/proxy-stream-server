@@ -172,8 +172,13 @@ class handler(BaseHTTPRequestHandler):
         qs = urllib.parse.parse_qs(parsed.query)
         parts = [p for p in path.split("/") if p]
 
-        # --- Route A: entry point (masih pakai path lama, belum ada token) ---
+        # --- Route A: entry point ---
         # /stream-hls/channel/{group}/{slug}/master.m3u8
+        # Langsung serve konten di sini (TIDAK redirect ke Route B lagi)
+        # supaya player gak buang 1 round-trip ekstra sebelum mulai load.
+        # Sub-playlist & segmen di dalam hasil rewrite tetap pakai URL
+        # /stream/live/... (origin tetap disembunyikan, cuma titik masuk
+        # awal yang dipercepat).
         if len(parts) >= 5 and parts[0] == "stream-hls" and parts[1] == "channel":
             group, slug = parts[2], parts[3]
             origin_url, _ = get_channel_origin(group, slug)
@@ -181,12 +186,7 @@ class handler(BaseHTTPRequestHandler):
                 return self._send(404, "Channel tidak ditemukan")
             exp = int(time.time()) + TOKEN_TTL_SECONDS
             token = make_token(group, slug, exp, "")
-            location = f"/stream/live/{group}/{slug}/master.m3u8?exp={exp}&token={token}"
-            self.send_response(302)
-            self.send_header("Location", location)
-            self.send_header("Cache-Control", "no-store")
-            self.end_headers()
-            return
+            return self._serve_live(group, slug, exp, token, "")
 
         # --- Route B: URL final (dengan token) ---
         # /stream/live/{group}/{slug}/{file}?exp=...&token=...&u=...
@@ -195,71 +195,76 @@ class handler(BaseHTTPRequestHandler):
             exp = qs.get("exp", [None])[0]
             token = qs.get("token", [None])[0]
             u = qs.get("u", [""])[0]
+            return self._serve_live(group, slug, exp, token, u)
 
-            if not verify_token(group, slug, exp, token, u):
-                return self._send(403, "Token tidak valid atau sudah kedaluwarsa")
+    def _serve_live(self, group, slug, exp, token, u):
+        """Logic inti serve konten (dulu = Route B). Dipanggil langsung dari
+        entry point (Route A, tanpa redirect) maupun dari URL /stream/live/...
+        yang muncul di dalam playlist hasil rewrite (sub-playlist, segmen)."""
+        if not verify_token(group, slug, exp, token, u):
+            return self._send(403, "Token tidak valid atau sudah kedaluwarsa")
 
-            user_agent = get_group_ua(group)
+        user_agent = get_group_ua(group)
 
-            if u:
-                origin_url = decode_u(u)
-            else:
-                origin_url, _ = get_channel_origin(group, slug)
-                if not origin_url:
-                    return self._send(404, "Channel tidak ditemukan")
+        if u:
+            origin_url = decode_u(u)
+        else:
+            origin_url, _ = get_channel_origin(group, slug)
+            if not origin_url:
+                return self._send(404, "Channel tidak ditemukan")
 
-            is_playlist = origin_url.split("?")[0].split("#")[0].endswith(".m3u8")
+        is_playlist = origin_url.split("?")[0].split("#")[0].endswith(".m3u8")
 
-            if is_playlist:
-                try:
-                    status, body, ctype = fetch_origin(origin_url, user_agent)
-                except urllib.error.HTTPError as e:
-                    return self._send(e.code, f"Upstream error {e.code}")
-                except Exception as e:
-                    return self._send(502, f"Gagal fetch origin: {e}")
-                text = body.decode("utf-8", errors="ignore")
-                rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent)
-                return self._send(200, rewritten, "application/vnd.apple.mpegurl")
-
-            # Segmen (.ts dll) -> stream langsung, tidak dibuffer penuh ke
-            # memori, supaya player lebih cepat mulai nerima data (mengurangi buffering).
+        if is_playlist:
             try:
-                origin_resp = open_origin(origin_url, user_agent)
+                status, body, ctype = fetch_origin(origin_url, user_agent)
             except urllib.error.HTTPError as e:
                 return self._send(e.code, f"Upstream error {e.code}")
             except Exception as e:
                 return self._send(502, f"Gagal fetch origin: {e}")
+            text = body.decode("utf-8", errors="ignore")
+            rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent)
+            return self._send(200, rewritten, "application/vnd.apple.mpegurl")
 
-            with origin_resp:
-                out_ctype = origin_resp.headers.get("Content-Type") or "video/MP2T"
-                content_length = origin_resp.headers.get("Content-Length")
+        # Segmen (.ts dll) -> stream langsung, tidak dibuffer penuh ke
+        # memori, supaya player lebih cepat mulai nerima data (mengurangi buffering).
+        try:
+            origin_resp = open_origin(origin_url, user_agent)
+        except urllib.error.HTTPError as e:
+            return self._send(e.code, f"Upstream error {e.code}")
+        except Exception as e:
+            return self._send(502, f"Gagal fetch origin: {e}")
 
-                self.send_response(200)
-                self.send_header("Content-Type", out_ctype)
-                self.send_header("Access-Control-Allow-Origin", "*")
-                self.send_header("Cache-Control", "no-store, no-cache, must-revalidate")
-                if content_length:
-                    self.send_header("Content-Length", content_length)
-                    self.end_headers()
-                    remaining = int(content_length)
-                    while remaining > 0:
-                        chunk = origin_resp.read(min(CHUNK_SIZE, remaining))
-                        if not chunk:
-                            break
-                        self.wfile.write(chunk)
-                        remaining -= len(chunk)
-                else:
-                    # Tidak ada Content-Length dari origin -> pakai chunked transfer encoding.
-                    self.send_header("Transfer-Encoding", "chunked")
-                    self.end_headers()
-                    while True:
-                        chunk = origin_resp.read(CHUNK_SIZE)
-                        if not chunk:
-                            self.wfile.write(b"0\r\n\r\n")
-                            break
-                        self.wfile.write(f"{len(chunk):X}\r\n".encode("ascii"))
-                        self.wfile.write(chunk)
-                        self.wfile.write(b"\r\n")
-                return
+        with origin_resp:
+            out_ctype = origin_resp.headers.get("Content-Type") or "video/MP2T"
+            content_length = origin_resp.headers.get("Content-Length")
+
+            self.send_response(200)
+            self.send_header("Content-Type", out_ctype)
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Cache-Control", "no-store, no-cache, must-revalidate")
+            if content_length:
+                self.send_header("Content-Length", content_length)
+                self.end_headers()
+                remaining = int(content_length)
+                while remaining > 0:
+                    chunk = origin_resp.read(min(CHUNK_SIZE, remaining))
+                    if not chunk:
+                        break
+                    self.wfile.write(chunk)
+                    remaining -= len(chunk)
+            else:
+                # Tidak ada Content-Length dari origin -> pakai chunked transfer encoding.
+                self.send_header("Transfer-Encoding", "chunked")
+                self.end_headers()
+                while True:
+                    chunk = origin_resp.read(CHUNK_SIZE)
+                    if not chunk:
+                        self.wfile.write(b"0\r\n\r\n")
+                        break
+                    self.wfile.write(f"{len(chunk):X}\r\n".encode("ascii"))
+                    self.wfile.write(chunk)
+                    self.wfile.write(b"\r\n")
+            return
 
         return self._send(404, "Not found")
