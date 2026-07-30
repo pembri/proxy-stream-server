@@ -2,6 +2,7 @@
   "regions": ["sin1"],
   "rewrites": [
     { "source": "/stream-hls/(.*)", "destination": "/api/proxy" },
-    { "source": "/stream/(.*)", "destination": "/api/proxy" }
+    { "source": "/stream/(.*)", "destination": "/api/proxy" },
+    { "source": "/:group/:slug", "destination": "/api/proxy" }
   ]
 }
