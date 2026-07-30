@@ -56,6 +56,7 @@ from http.server import BaseHTTPRequestHandler
 
 TOKEN_TTL_SECONDS = 24 * 60 * 60  # 24 jam
 SECRET_KEY = os.environ.get("PROXY_SECRET_KEY", "ganti-secret-key-ini-di-env-vercel")
+ALLOWED_REFERER_DOMAIN = "vidiraplay.biz.id"  # hotlink protection - lihat _check_referer
 
 CHANNELS_PATH = os.path.join(os.path.dirname(__file__), "..", "channel.json")
 with open(CHANNELS_PATH, "r", encoding="utf-8") as f:
@@ -181,7 +182,28 @@ class handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _check_referer(self):
+        """Hotlink protection: cuma terima request yang Referer/Origin-nya
+        berasal dari domain vidiraplay.biz.id atau subdomainnya (misal
+        iptv.vidiraplay.biz.id). Request tanpa Referer/Origin (curl polos,
+        app IPTV generik yang gak kirim header ini) langsung ditolak.
+        CATATAN: ini menaikkan standar proteksi, TAPI BUKAN proteksi mutlak
+        - Referer/Origin bisa dipalsukan manual oleh yang paham teknis
+        (beberapa app punya opsi custom header). Berlaku generik untuk
+        SEMUA rute (A, B, C) - tidak spesifik 1 grup."""
+        ref = self.headers.get("Referer") or self.headers.get("Origin") or ""
+        if not ref:
+            return False
+        try:
+            host = urllib.parse.urlparse(ref).hostname or ""
+        except Exception:
+            return False
+        return host == ALLOWED_REFERER_DOMAIN or host.endswith("." + ALLOWED_REFERER_DOMAIN)
+
     def do_GET(self):
+        if not self._check_referer():
+            return self._send(403, "Forbidden")
+
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
         qs = urllib.parse.parse_qs(parsed.query)
@@ -213,6 +235,24 @@ class handler(BaseHTTPRequestHandler):
             idx_raw = qs.get("idx", [None])[0]
             idx = int(idx_raw) if idx_raw is not None else None
             return self._serve_live(group, slug, exp, token, u, idx=idx)
+
+        # --- Route C: vanity URL "API palsu" ---
+        # /{group}/{slug}  (contoh: /03/sctv)
+        # Sengaja dibuat MIRIP endpoint REST API biasa (tanpa embel-embel
+        # "stream-hls"/"master.m3u8") supaya kalau ada yang capture traffic
+        # player, URL-nya tidak langsung kelihatan sebagai link streaming.
+        # Fungsinya IDENTIK dengan Route A - cuma bentuk path-nya beda.
+        # Domain yang dipakai buat rute ini: api-stream.vidiraplay.biz.id
+        # (didaftarkan sebagai custom domain terpisah di Vercel, tapi
+        # tetap 1 project/deployment yang sama dengan proxy-stream-server).
+        if len(parts) == 2:
+            group, slug = parts[0], parts[1]
+            origin_url, _ = get_channel_origin(group, slug)
+            if not origin_url:
+                return self._send(404, "Not found")
+            exp = int(time.time()) + TOKEN_TTL_SECONDS
+            token = make_token(group, slug, exp, "")
+            return self._serve_live(group, slug, exp, token, "", idx=None)
 
     def _reresolve_and_retry(self, group, slug, idx, user_agent):
         """Fetch ulang master ASLI channel ini dari channel.json (fresh,
