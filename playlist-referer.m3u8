@@ -1,0 +1,175 @@
+#EXTM3U
+#EXTINF:-1 group-title="Grup 01",Animax
+https://api-stream.vidiraplay.biz.id/01/animax
+#EXTINF:-1 group-title="Grup 01",Aniplus
+https://api-stream.vidiraplay.biz.id/01/aniplus
+#EXTINF:-1 group-title="Grup 01",AXN
+https://api-stream.vidiraplay.biz.id/01/axn
+#EXTINF:-1 group-title="Grup 01",Bloomberg TV
+https://api-stream.vidiraplay.biz.id/01/bloomberg-tv
+#EXTINF:-1 group-title="Grup 01",Celestial Movies
+https://api-stream.vidiraplay.biz.id/01/celestial-movies
+#EXTINF:-1 group-title="Grup 01",Cinemax
+https://api-stream.vidiraplay.biz.id/01/cinemax
+#EXTINF:-1 group-title="Grup 01",CNA
+https://api-stream.vidiraplay.biz.id/01/cna
+#EXTINF:-1 group-title="Grup 01",CNBC Indonesia
+https://api-stream.vidiraplay.biz.id/01/cnbc-indonesia
+#EXTINF:-1 group-title="Grup 01",CNN Indonesia
+https://api-stream.vidiraplay.biz.id/01/cnn-indonesia
+#EXTINF:-1 group-title="Grup 01",Dragon TV
+https://api-stream.vidiraplay.biz.id/01/dragon-tv
+#EXTINF:-1 group-title="Grup 01",Flik
+https://api-stream.vidiraplay.biz.id/01/flik
+#EXTINF:-1 group-title="Grup 01",Formosa TV
+https://api-stream.vidiraplay.biz.id/01/formosa-tv
+#EXTINF:-1 group-title="Grup 01",Formosa TV
+https://api-stream.vidiraplay.biz.id/01/formosa-tv-2
+#EXTINF:-1 group-title="Grup 01",Galaxy
+https://api-stream.vidiraplay.biz.id/01/galaxy
+#EXTINF:-1 group-title="Grup 01",Galaxy Premium
+https://api-stream.vidiraplay.biz.id/01/galaxy-premium
+#EXTINF:-1 group-title="Grup 01",HBO
+https://api-stream.vidiraplay.biz.id/01/hbo
+#EXTINF:-1 group-title="Grup 01",HBO Family
+https://api-stream.vidiraplay.biz.id/01/hbo-family
+#EXTINF:-1 group-title="Grup 01",HBO Signature
+https://api-stream.vidiraplay.biz.id/01/hbo-signature
+#EXTINF:-1 group-title="Grup 01",HITS
+https://api-stream.vidiraplay.biz.id/01/hits
+#EXTINF:-1 group-title="Grup 01",KBS World
+https://api-stream.vidiraplay.biz.id/01/kbs-world
+#EXTINF:-1 group-title="Grup 01",KIX
+https://api-stream.vidiraplay.biz.id/01/kix
+#EXTINF:-1 group-title="Grup 01",Kompas TV
+https://api-stream.vidiraplay.biz.id/01/kompas-tv
+#EXTINF:-1 group-title="Grup 01",KTV
+https://api-stream.vidiraplay.biz.id/01/ktv
+#EXTINF:-1 group-title="Grup 01",Magna Channel
+https://api-stream.vidiraplay.biz.id/01/magna-channel
+#EXTINF:-1 group-title="Grup 01",MAX Reels
+https://api-stream.vidiraplay.biz.id/01/max-reels
+#EXTINF:-1 group-title="Grup 01",MDTV
+https://api-stream.vidiraplay.biz.id/01/mdtv
+#EXTINF:-1 group-title="Grup 01",Metro TV
+https://api-stream.vidiraplay.biz.id/01/metro-tv
+#EXTINF:-1 group-title="Grup 01",Moji TV
+https://api-stream.vidiraplay.biz.id/01/moji-tv
+#EXTINF:-1 group-title="Grup 01",Nick JR
+https://api-stream.vidiraplay.biz.id/01/nick-jr
+#EXTINF:-1 group-title="Grup 01",Nickelodeon
+https://api-stream.vidiraplay.biz.id/01/nickelodeon
+#EXTINF:-1 group-title="Grup 01",Nusantara TV
+https://api-stream.vidiraplay.biz.id/01/nusantara-tv
+#EXTINF:-1 group-title="Grup 01",Outdoor
+https://api-stream.vidiraplay.biz.id/01/outdoor
+#EXTINF:-1 group-title="Grup 01",PBS Kids
+https://api-stream.vidiraplay.biz.id/01/pbs-kids
+#EXTINF:-1 group-title="Grup 01",PBS Kids
+https://api-stream.vidiraplay.biz.id/01/pbs-kids-2
+#EXTINF:-1 group-title="Grup 01",Redbull
+https://api-stream.vidiraplay.biz.id/01/redbull
+#EXTINF:-1 group-title="Grup 01",Rock Entertainment
+https://api-stream.vidiraplay.biz.id/01/rock-entertainment
+#EXTINF:-1 group-title="Grup 01",RTV
+https://api-stream.vidiraplay.biz.id/01/rtv
+#EXTINF:-1 group-title="Grup 01",SPOTV 2
+https://api-stream.vidiraplay.biz.id/01/spotv-2
+#EXTINF:-1 group-title="Grup 01",Trans 7
+https://api-stream.vidiraplay.biz.id/01/trans-7
+#EXTINF:-1 group-title="Grup 01",Trans TV
+https://api-stream.vidiraplay.biz.id/01/trans-tv
+#EXTINF:-1 group-title="Grup 01",TVBS
+https://api-stream.vidiraplay.biz.id/01/tvbs
+#EXTINF:-1 group-title="Grup 01",TVN
+https://api-stream.vidiraplay.biz.id/01/tvn
+#EXTINF:-1 group-title="Grup 01",TVN Movies
+https://api-stream.vidiraplay.biz.id/01/tvn-movies
+#EXTINF:-1 group-title="Grup 01",TVOne
+https://api-stream.vidiraplay.biz.id/01/tvone
+#EXTINF:-1 group-title="Grup 01",TVRI
+https://api-stream.vidiraplay.biz.id/01/tvri
+#EXTINF:-1 group-title="Grup 01",TVRI Sport
+https://api-stream.vidiraplay.biz.id/01/tvri-sport
+#EXTINF:-1 group-title="Grup 01",VTV
+https://api-stream.vidiraplay.biz.id/01/vtv
+#EXTINF:-1 group-title="Grup 01",WOF Sport
+https://api-stream.vidiraplay.biz.id/01/wof-sport
+#EXTINF:-1 group-title="Grup 01",Zoo Moo
+https://api-stream.vidiraplay.biz.id/01/zoo-moo
+#EXTINF:-1 group-title="Grup 02",CNBC Indonesia
+https://api-stream.vidiraplay.biz.id/02/cnbc-indonesia
+#EXTINF:-1 group-title="Grup 02",CNN Indonesia
+https://api-stream.vidiraplay.biz.id/02/cnn-indonesia
+#EXTINF:-1 group-title="Grup 02",GTV
+https://api-stream.vidiraplay.biz.id/02/gtv
+#EXTINF:-1 group-title="Grup 02",iNews
+https://api-stream.vidiraplay.biz.id/02/inews
+#EXTINF:-1 group-title="Grup 02",MNCTV
+https://api-stream.vidiraplay.biz.id/02/mnctv
+#EXTINF:-1 group-title="Grup 02",RCTI
+https://api-stream.vidiraplay.biz.id/02/rcti
+#EXTINF:-1 group-title="Grup 02",Trans 7
+https://api-stream.vidiraplay.biz.id/02/trans-7
+#EXTINF:-1 group-title="Grup 02",Trans TV
+https://api-stream.vidiraplay.biz.id/02/trans-tv
+#EXTINF:-1 group-title="Grup 03",African News
+https://api-stream.vidiraplay.biz.id/03/african-news
+#EXTINF:-1 group-title="Grup 03",AJWA TV
+https://api-stream.vidiraplay.biz.id/03/ajwa-tv
+#EXTINF:-1 group-title="Grup 03",Aljazeera
+https://api-stream.vidiraplay.biz.id/03/aljazeera-english
+#EXTINF:-1 group-title="Grup 03",ANTV
+https://api-stream.vidiraplay.biz.id/03/antv
+#EXTINF:-1 group-title="Grup 03",Arirang
+https://api-stream.vidiraplay.biz.id/03/arirang
+#EXTINF:-1 group-title="Grup 03",Berita Satu
+https://api-stream.vidiraplay.biz.id/03/berita-satu
+#EXTINF:-1 group-title="Grup 03",BTV
+https://api-stream.vidiraplay.biz.id/03/btv
+#EXTINF:-1 group-title="Grup 03",CNA
+https://api-stream.vidiraplay.biz.id/03/cna
+#EXTINF:-1 group-title="Grup 03",DAAI TV
+https://api-stream.vidiraplay.biz.id/03/daai-tv
+#EXTINF:-1 group-title="Grup 03",DMI TV
+https://api-stream.vidiraplay.biz.id/03/dmi-tv
+#EXTINF:-1 group-title="Grup 03",DW English
+https://api-stream.vidiraplay.biz.id/03/dw-english
+#EXTINF:-1 group-title="Grup 03",Elshinta TV
+https://api-stream.vidiraplay.biz.id/03/elshinta-tv
+#EXTINF:-1 group-title="Grup 03",Euro News
+https://api-stream.vidiraplay.biz.id/03/euronews.
+#EXTINF:-1 group-title="Grup 03",Garuda TV
+https://api-stream.vidiraplay.biz.id/03/garuda-tv
+#EXTINF:-1 group-title="Grup 03",Indosiar
+https://api-stream.vidiraplay.biz.id/03/indosiar
+#EXTINF:-1 group-title="Grup 03",JakTV
+https://api-stream.vidiraplay.biz.id/03/jak-tv
+#EXTINF:-1 group-title="Grup 03",JTV
+https://api-stream.vidiraplay.biz.id/03/jtv
+#EXTINF:-1 group-title="Grup 03",Makkah TV
+https://api-stream.vidiraplay.biz.id/03/makkah-tv
+#EXTINF:-1 group-title="Grup 03",MDTV
+https://api-stream.vidiraplay.biz.id/03/mdtv
+#EXTINF:-1 group-title="Grup 03",Mentari TV
+https://api-stream.vidiraplay.biz.id/03/mentari-tv
+#EXTINF:-1 group-title="Grup 03",Metro TV
+https://api-stream.vidiraplay.biz.id/03/metro-tv
+#EXTINF:-1 group-title="Grup 03",MUSICA
+https://api-stream.vidiraplay.biz.id/03/musica
+#EXTINF:-1 group-title="Grup 03",NHK World Japan
+https://api-stream.vidiraplay.biz.id/03/nhk-world-japan
+#EXTINF:-1 group-title="Grup 03",Nusantara TV
+https://api-stream.vidiraplay.biz.id/03/nusantara-tv
+#EXTINF:-1 group-title="Grup 03",RTV
+https://api-stream.vidiraplay.biz.id/03/rtv
+#EXTINF:-1 group-title="Grup 03",SCTV
+https://api-stream.vidiraplay.biz.id/03/sctv
+#EXTINF:-1 group-title="Grup 03",Sin Po TV
+https://api-stream.vidiraplay.biz.id/03/sin-po-tv
+#EXTINF:-1 group-title="Grup 03",TV5Monde
+https://api-stream.vidiraplay.biz.id/03/tv5-monde
+#EXTINF:-1 group-title="Grup 03",TVOne
+https://api-stream.vidiraplay.biz.id/03/tvone
+#EXTINF:-1 group-title="Grup 03",U-Channel TV
+https://api-stream.vidiraplay.biz.id/03/u-channel-tv
