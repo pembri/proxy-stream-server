@@ -57,6 +57,7 @@ from http.server import BaseHTTPRequestHandler
 TOKEN_TTL_SECONDS = 24 * 60 * 60  # 24 jam
 SECRET_KEY = os.environ.get("PROXY_SECRET_KEY", "ganti-secret-key-ini-di-env-vercel")
 ALLOWED_REFERER_DOMAIN = "vidiraplay.biz.id"  # hotlink protection - lihat _check_referer
+TESTING_DOMAINS_NO_REFERER_CHECK = {"proxy-stream-server.vidiraplay.biz.id"}  # domain testing, TIDAK pernah dipublish - lihat _check_referer
 
 CHANNELS_PATH = os.path.join(os.path.dirname(__file__), "..", "channel.json")
 with open(CHANNELS_PATH, "r", encoding="utf-8") as f:
@@ -190,7 +191,19 @@ class handler(BaseHTTPRequestHandler):
         CATATAN: ini menaikkan standar proteksi, TAPI BUKAN proteksi mutlak
         - Referer/Origin bisa dipalsukan manual oleh yang paham teknis
         (beberapa app punya opsi custom header). Berlaku generik untuk
-        SEMUA rute (A, B, C) - tidak spesifik 1 grup."""
+        SEMUA rute (A, B, C) - tidak spesifik 1 grup.
+
+        KECUALI: domain di TESTING_DOMAINS_NO_REFERER_CHECK (misal
+        proxy-stream-server.vidiraplay.biz.id) SENGAJA dibebaskan dari
+        check ini - domain itu dipakai user cuma buat testing manual
+        (curl dari Termux dll), TIDAK PERNAH dipublish/ditanam di player
+        publik. Kalau nanti mau lebih aman lagi, domain testing ini juga
+        bisa ditambah proteksi ringan lain (bukan Referer) - tanya user
+        dulu sebelum berubah, jangan diam-diam dihapus dari daftar."""
+        host_header = (self.headers.get("Host") or "").split(":")[0].lower()
+        if host_header in TESTING_DOMAINS_NO_REFERER_CHECK:
+            return True
+
         ref = self.headers.get("Referer") or self.headers.get("Origin") or ""
         if not ref:
             return False
