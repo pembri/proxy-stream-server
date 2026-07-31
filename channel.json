@@ -381,6 +381,7 @@
   "04": {
     "base_url": "https://ogietv.biz.id:443/Dimas01/bara01/",
     "user_agent": null,
+    "direct_subresources": true,
     "channels": {
       "trans-tv-1": {
         "path": "1312.m3u8",
