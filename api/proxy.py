@@ -392,17 +392,21 @@ class handler(BaseHTTPRequestHandler):
                     self.wfile.write(chunk)
                     remaining -= len(chunk)
             else:
-                # Tidak ada Content-Length dari origin -> pakai chunked transfer encoding.
-                self.send_header("Transfer-Encoding", "chunked")
+                # Origin TIDAK kasih Content-Length (jarang terjadi, contoh:
+                # file key AES-128 di grup 04/ogietv). Dulu di sini pakai
+                # Transfer-Encoding: chunked manual (nulis hex-length +
+                # data langsung ke wfile), TAPI itu bikin Vercel Python
+                # runtime crash (FUNCTION_INVOCATION_FAILED) - kemungkinan
+                # gak kompatibel sama cara Vercel wrap response BaseHTTP-
+                # RequestHandler. Makanya fallback ke cara paling aman:
+                # baca semua body ke memori dulu (biasanya file kecil kalau
+                # sampai gak ada Content-Length, misal key 16 byte), baru
+                # kirim dengan Content-Length yang dihitung sendiri -
+                # JANGAN dikembalikan ke chunked manual lagi.
+                body = origin_resp.read()
+                self.send_header("Content-Length", str(len(body)))
                 self.end_headers()
-                while True:
-                    chunk = origin_resp.read(CHUNK_SIZE)
-                    if not chunk:
-                        self.wfile.write(b"0\r\n\r\n")
-                        break
-                    self.wfile.write(f"{len(chunk):X}\r\n".encode("ascii"))
-                    self.wfile.write(chunk)
-                    self.wfile.write(b"\r\n")
+                self.wfile.write(body)
             return
 
         return self._send(404, "Not found")
