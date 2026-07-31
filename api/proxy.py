@@ -2,85 +2,44 @@
 api/proxy.py
 Proxy + URL-hider untuk channel IPTV.
 
-=====================================================================
-RUTE YANG TERSEDIA (semua generik, tidak ada percabangan per-grup):
-=====================================================================
-1. Route A - GET /stream-hls/channel/{group}/{slug}/master.m3u8
-   Titik masuk "testing" (bentuk path jelas kelihatan ini link
-   streaming). Langsung generate token (24 jam) dan LANGSUNG serve
-   konten di request yang sama - TIDAK redirect 302 ke Route B lagi
-   (redirect dihapus karena buang 1 round-trip yang bikin loading
-   awal lebih lambat dari perlu).
+Alur:
+1. GET /stream-hls/channel/{group}/{slug}/master.m3u8
+   -> generate token (berlaku 24 jam) lalu 302 redirect ke:
+   /stream/live/{group}/{slug}/master.m3u8?exp=...&token=...
 
-2. Route B - GET /stream/live/{group}/{slug}/{file}?exp=...&token=...
-              [&u=...][&idx=...]
-   URL INTERNAL, muncul otomatis di dalam hasil rewrite playlist
-   (sub-playlist, segmen .ts, key AES-128) - TIDAK PERNAH diketik
-   manual. "u" = base64 dari URL origin asli (disembunyikan). "idx"
-   = posisi variant ini di master asli (dipakai buat re-resolve
-   kalau link basi, lihat _reresolve_and_retry).
-
-3. Route C - GET /{group}/{slug}  (contoh: /03/sctv)
-   Titik masuk "publik" (vanity URL), sengaja mirip REST API biasa
-   (tanpa "stream-hls"/"master.m3u8") supaya kalau di-capture gak
-   langsung ketauan ini link streaming. Fungsinya IDENTIK Route A,
-   dipakai di domain berbeda (lihat catatan domain di bawah).
-
-Ketiga rute berujung ke method bersama _serve_live(), yang:
-  - Fetch origin (dari channel.json via "u"/slug, sesuai kasus).
-  - Kalau isinya .m3u8: rewrite SEMUA URI di dalamnya (baris biasa,
-    DAN URI="..." di dalam #EXT-X-KEY buat stream AES-128 terenkripsi
-    kayak ogietv/grup 04 - lihat rewrite_key_line) supaya tetap lewat
-    proxy, origin asli tidak pernah terlihat.
-  - Kalau bukan .m3u8 (segmen .ts, file key, dll): diteruskan sebagai
-    stream chunked 64KB kalau origin kasih Content-Length (irit
-    memori, ini kunci utama biar gak buffering). Kalau origin TIDAK
-    kasih Content-Length (jarang, misal file key 16-byte), fallback
-    baca penuh ke memori baru dikirim - JANGAN pakai Transfer-Encoding
-    chunked manual, itu pernah bikin Vercel Python runtime crash
-    (FUNCTION_INVOCATION_FAILED).
-  - Re-resolve otomatis (_reresolve_and_retry): kalau variant/sub-
-    playlist basi (404) DAN request itu berasal dari top-level master
-    (ada "idx"), fetch ulang master fresh dari channel.json, ambil
-    variant di posisi idx yang sama, retry sekali - transparan buat
-    player. Kasus nyata: origin grup 01 (103.148.44.38) menerbitkan
-    nama file variant baru & sekali-pakai tiap master di-fetch.
-
-=====================================================================
-HOTLINK PROTECTION (_check_referer) - berlaku di SEMUA rute (A/B/C):
-=====================================================================
-- Domain di TESTING_DOMAINS_NO_REFERER_CHECK (proxy-stream-server.
-  vidiraplay.biz.id) BEBAS diakses tanpa header Referer - domain ini
-  KHUSUS TESTING, TIDAK PERNAH dipublish ke player publik.
-- Domain lain (termasuk api-stream.vidiraplay.biz.id, yang DITANAM
-  di website publik) WAJIB header Referer/Origin yang hostname-nya
-  vidiraplay.biz.id atau subdomainnya (ALLOWED_REFERER_DOMAIN).
-  Tanpa itu -> 403. INI BUKAN proteksi mutlak (bisa dipalsukan
-  manual oleh yang paham teknis), cuma menaikkan standar.
+2. GET /stream/live/{group}/{slug}/{apapun}?exp=...&token=...[&u=...]
+   -> validasi token & masa berlaku, lalu fetch konten asli dari origin
+      (base_url + path di channel.json, atau dari param "u" untuk
+      sub-resource / variant playlist / segmen .ts hasil rewrite),
+      lalu:
+        - kalau isinya .m3u8: rewrite semua URI di dalamnya supaya
+          tetap lewat proxy ini (origin asli tidak pernah terlihat
+          di response maupun di address bar).
+        - kalau bukan .m3u8 (misal .ts): diteruskan apa adanya
+          (streaming passthrough, di-chunk 64KB biar gak nge-buffer
+          penuh ke memori dulu - ini yang bikin grup 01 & 02 lancar).
 
 =====================================================================
 CATATAN BUAT SESI/AKUN CLAUDE LAIN YANG LANJUTIN PROJECT INI:
 =====================================================================
-- File ini sudah diuji dan JALAN LANCAR untuk grup "01", "02", "03",
-  "04" (baca channel.json untuk detail & karakteristik tiap grup -
-  ada catatan penting soal buffering, rotasi link, enkripsi, dll
-  yang beda-beda per grup).
-- JANGAN ubah logic umum di sini (make_token, verify_token,
-  rewrite_playlist, rewrite_key_line, _serve_live, _check_referer,
-  streaming chunked, re-resolve idx) kecuali user eksplisit minta
-  perbaikan/bug fix. Semua grup lewat logic yang SAMA - channel.json
-  yang membedakan origin/header per grup, bukan percabangan kode.
-- Kalau user minta tambah grup baru: CUKUP tambah entry baru di
-  channel.json (base_url, user_agent, channels). TIDAK PERLU dan
-  TIDAK BOLEH mengubah kode di file ini untuk itu - route handler
-  sudah generik menerima {group} apa saja yang ada di channel.json.
-- Kalau origin baru butuh perlakuan khusus (cookie session, 2-step
-  request, dsb) yang beneran gak bisa ditangani logic generik ini,
-  tanya dulu ke user sebelum ubah struktur besar - jangan langsung
-  refactor karena bisa merusak grup yang sudah lancar.
-- Jangan hapus/ubah TESTING_DOMAINS_NO_REFERER_CHECK atau
-  ALLOWED_REFERER_DOMAIN tanpa diminta eksplisit - itu pemisahan
-  keamanan publik vs testing yang disengaja.
+- File ini sudah diuji dan JALAN LANCAR untuk grup "01" dan "02"
+  (baca channel.json untuk detail masing-masing grup & catatan
+  perbedaan karakteristiknya).
+- JANGAN ubah logic umum di bawah ini (make_token, verify_token,
+  rewrite_playlist, streaming chunked di do_GET) kecuali user
+  eksplisit minta perbaikan/bug fix. Semua grup (01, 02, 03, dst)
+  lewat logic yang SAMA di file ini - channel.json yang membedakan
+  origin/header per grup, bukan percabangan kode.
+- Kalau user minta tambah grup baru (03, 04, dst): CUKUP tambah
+  entry baru di channel.json (base_url, user_agent, channels).
+  TIDAK PERLU dan TIDAK BOLEH mengubah kode di file ini untuk itu,
+  karena route handler sudah generik menerima {group} apa saja
+  yang ada di channel.json.
+- Kalau origin baru butuh perlakuan khusus (misal butuh cookie,
+  butuh 2-step request, dsb) yang beneran gak bisa ditangani logic
+  generik ini, tanya dulu ke user sebelum ubah struktur besar -
+  jangan langsung refactor karena bisa merusak grup yang sudah
+  lancar.
 =====================================================================
 """
 
@@ -169,37 +128,17 @@ def fetch_origin(url, user_agent=None):
 KEY_URI_RE = re.compile(r'URI="([^"]+)"')
 
 
-def get_group_direct_subresources(group):
-    """Cek flag 'direct_subresources' per grup di channel.json. Kalau True,
-    sub-playlist/segmen/key di dalam hasil rewrite TIDAK diproxy - URL-nya
-    langsung nunjuk ke origin asli (player fetch langsung ke origin).
-    Dipakai buat origin yang datanya rusak/gagal kalau ikut diproxy (contoh:
-    grup 04/ogietv - segmen AES-128 sempat kena fragParsingError di player
-    kalau ikut lewat proxy, videonya lancar kalau segmen fetch langsung ke
-    origin). Cuma titik masuk (master.m3u8) yang tetap diproxy (biar token
-    generate & origin tetap disamarkan di request pertama). Default False
-    (semua ikut diproxy penuh) - HARUS eksplisit diaktifkan per grup di
-    channel.json, bukan behavior baku."""
-    grp = CHANNELS.get(group)
-    return bool(grp.get("direct_subresources")) if grp else False
-
-
-def rewrite_key_line(line, base, group, slug, exp, direct=False):
+def rewrite_key_line(line, base, group, slug, exp):
     """Rewrite URI="..." di baris #EXT-X-KEY (dipakai stream ter-enkripsi
     AES-128, misal ogietv). URI di baris ini SERING kali relatif (contoh:
     "/key/xxxx") - kalau dibiarkan apa adanya, player bakal resolve URI
     itu relatif ke domain PROXY kita (bukan domain origin), bikin fetch
     key gagal total dan video gak bisa didekripsi/gak bisa play sama
-    sekali. Jadi URI ini WAJIB di-resolve absolute dulu.
-
-    Kalau direct=True (lihat get_group_direct_subresources), URI diarahkan
-    LANGSUNG ke origin asli (tidak diproxy) - dipakai untuk origin yang
-    datanya rusak kalau lewat proxy."""
+    sekali. Jadi URI ini WAJIB di-resolve absolute dulu lalu di-proxy-kan
+    juga (sama seperti segmen .ts biasa), meski responsenya bukan .ts."""
     def replace(m):
         key_url = m.group(1)
         abs_key_url = urllib.parse.urljoin(base, key_url)
-        if direct:
-            return f'URI="{abs_key_url}"'
         u = encode_u(abs_key_url)
         new_token = make_token(group, slug, exp, u)
         query = urllib.parse.urlencode({"exp": exp, "token": new_token, "u": u})
@@ -208,29 +147,19 @@ def rewrite_key_line(line, base, group, slug, exp, direct=False):
     return KEY_URI_RE.sub(replace, line)
 
 
-def rewrite_playlist(body_text, origin_url, group, slug, exp, token, user_agent, is_top_level=False, direct=False):
+def rewrite_playlist(body_text, origin_url, group, slug, exp, token, user_agent, is_top_level=False):
     base = origin_url.rsplit("/", 1)[0] + "/"
     out_lines = []
     idx = 0
     for line in body_text.splitlines():
         stripped = line.strip()
         if stripped.startswith("#EXT-X-KEY") and "URI=" in stripped:
-            out_lines.append(rewrite_key_line(line, base, group, slug, exp, direct=direct))
+            out_lines.append(rewrite_key_line(line, base, group, slug, exp))
             continue
         if not stripped or stripped.startswith("#"):
             out_lines.append(line)
             continue
         abs_url = urllib.parse.urljoin(base, stripped)
-
-        if direct:
-            # Mode direct_subresources aktif (lihat get_group_direct_subresources) -
-            # origin ini datanya rusak/gagal kalau ikut diproxy (fragParsingError
-            # dkk), jadi sub-playlist/segmen langsung diarahkan ke origin asli.
-            # Hanya titik masuk (master.m3u8) yang tetap diproxy.
-            out_lines.append(abs_url)
-            idx += 1
-            continue
-
         u = encode_u(abs_url)
         new_exp = exp
         new_token = make_token(group, slug, new_exp, u)
@@ -432,8 +361,7 @@ class handler(BaseHTTPRequestHandler):
             except Exception as e:
                 return self._send(502, f"Gagal fetch origin: {e}")
             text = body.decode("utf-8", errors="ignore")
-            direct = get_group_direct_subresources(group)
-            rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent, is_top_level=is_top_level, direct=direct)
+            rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent, is_top_level=is_top_level)
             return self._send(200, rewritten, "application/vnd.apple.mpegurl")
 
         # Segmen (.ts dll) -> stream langsung, tidak dibuffer penuh ke
