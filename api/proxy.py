@@ -48,6 +48,7 @@ import hashlib
 import hmac
 import json
 import os
+import re
 import time
 import urllib.parse
 import urllib.request
@@ -124,12 +125,37 @@ def fetch_origin(url, user_agent=None):
         return resp.status, resp.read(), resp.headers.get("Content-Type", "")
 
 
+KEY_URI_RE = re.compile(r'URI="([^"]+)"')
+
+
+def rewrite_key_line(line, base, group, slug, exp):
+    """Rewrite URI="..." di baris #EXT-X-KEY (dipakai stream ter-enkripsi
+    AES-128, misal ogietv). URI di baris ini SERING kali relatif (contoh:
+    "/key/xxxx") - kalau dibiarkan apa adanya, player bakal resolve URI
+    itu relatif ke domain PROXY kita (bukan domain origin), bikin fetch
+    key gagal total dan video gak bisa didekripsi/gak bisa play sama
+    sekali. Jadi URI ini WAJIB di-resolve absolute dulu lalu di-proxy-kan
+    juga (sama seperti segmen .ts biasa), meski responsenya bukan .ts."""
+    def replace(m):
+        key_url = m.group(1)
+        abs_key_url = urllib.parse.urljoin(base, key_url)
+        u = encode_u(abs_key_url)
+        new_token = make_token(group, slug, exp, u)
+        query = urllib.parse.urlencode({"exp": exp, "token": new_token, "u": u})
+        proxied = f"/stream/live/{group}/{slug}/key?{query}"
+        return f'URI="{proxied}"'
+    return KEY_URI_RE.sub(replace, line)
+
+
 def rewrite_playlist(body_text, origin_url, group, slug, exp, token, user_agent, is_top_level=False):
     base = origin_url.rsplit("/", 1)[0] + "/"
     out_lines = []
     idx = 0
     for line in body_text.splitlines():
         stripped = line.strip()
+        if stripped.startswith("#EXT-X-KEY") and "URI=" in stripped:
+            out_lines.append(rewrite_key_line(line, base, group, slug, exp))
+            continue
         if not stripped or stripped.startswith("#"):
             out_lines.append(line)
             continue
