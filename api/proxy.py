@@ -100,6 +100,13 @@ TOKEN_TTL_SECONDS = 24 * 60 * 60  # 24 jam
 SECRET_KEY = os.environ.get("PROXY_SECRET_KEY", "ganti-secret-key-ini-di-env-vercel")
 ALLOWED_REFERER_DOMAIN = "vidiraplay.biz.id"  # hotlink protection - lihat _check_referer
 TESTING_DOMAINS_NO_REFERER_CHECK = {"proxy-stream-server.vidiraplay.biz.id"}  # domain testing, TIDAK pernah dipublish - lihat _check_referer
+# Sub-playlist/segmen/key hasil rewrite SELALU absolute ke domain ini,
+# APAPUN domain titik masuknya (api-stream ATAU proxy-stream-server).
+# Jadi kalau masuk lewat api-stream.vidiraplay.biz.id (wajib Referer),
+# konten sesudahnya (bulk data video) tetap lewat proxy-stream-server
+# yang TIDAK ada Referer check - supaya player yang gak forward Referer
+# ke request susulan (banyak player begitu) tetap bisa lanjut streaming.
+PROXY_STREAM_DOMAIN = "proxy-stream-server.vidiraplay.biz.id"
 
 CHANNELS_PATH = os.path.join(os.path.dirname(__file__), "..", "channel.json")
 with open(CHANNELS_PATH, "r", encoding="utf-8") as f:
@@ -203,7 +210,7 @@ def rewrite_key_line(line, base, group, slug, exp, direct=False):
         u = encode_u(abs_key_url)
         new_token = make_token(group, slug, exp, u)
         query = urllib.parse.urlencode({"exp": exp, "token": new_token, "u": u})
-        proxied = f"/stream/live/{group}/{slug}/key?{query}"
+        proxied = f"https://{PROXY_STREAM_DOMAIN}/stream/live/{group}/{slug}/key?{query}"
         return f'URI="{proxied}"'
     return KEY_URI_RE.sub(replace, line)
 
@@ -259,7 +266,7 @@ def rewrite_playlist(body_text, origin_url, group, slug, exp, token, user_agent,
             # cuma jalan kalau memang origin butuh (lihat _serve_live).
             params["idx"] = idx
         query = urllib.parse.urlencode(params)
-        proxied = f"/stream/live/{group}/{slug}/{filename}?{query}"
+        proxied = f"https://{PROXY_STREAM_DOMAIN}/stream/live/{group}/{slug}/{filename}?{query}"
         out_lines.append(proxied)
         idx += 1
     return "\n".join(out_lines)
