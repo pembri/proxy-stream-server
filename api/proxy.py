@@ -46,6 +46,29 @@ Ketiga rute berujung ke method bersama _serve_live(), yang:
     player. Kasus nyata: origin grup 01 (103.148.44.38) menerbitkan
     nama file variant baru & sekali-pakai tiap master di-fetch.
 
+CATATAN URL SUB-RESOURCE: semua URL hasil rewrite (segmen, sub-
+playlist, key) SELALU absolute ke PROXY_STREAM_DOMAIN (domain
+testing), BUKAN path relatif - walau master-nya dibuka lewat domain
+publik (api-stream). Ini sengaja (keputusan user): domain publik
+cuma jadi gerbang masuk yang diproteksi Referer, tapi bulk data
+video sesudahnya tetap lewat domain testing yang bebas Referer -
+supaya player yang gak forward Referer ke request susulan (banyak
+begitu) tetap bisa lanjut streaming. KONSEKUENSI: Referer check
+CUMA efektif di titik masuk, bukan di bulk data - trade-off yang
+disadari & diterima, JANGAN diubah balik ke path relatif tanpa
+diminta.
+
+CATATAN direct_subresources: flag per-grup di channel.json, kalau
+true sub-playlist/segmen/key TIDAK diproxy sama sekali (langsung ke
+origin asli, cuma master yang diproxy). Dibuat buat coba benerin
+channel yang datanya rusak kalau ikut diproxy, TAPI MENSYARATKAN
+origin punya CORS terbuka (Access-Control-Allow-Origin) - kalau
+tidak, browser/player malah blokir fetch dan tambah gagal. Grup 04
+sudah dicoba & GAGAL karena ogietv.biz.id gak ada CORS sama sekali -
+flag ini `false` untuk grup 04. JANGAN aktifkan buat grup manapun
+tanpa cek CORS origin-nya dulu (curl -I, cek header
+Access-Control-Allow-Origin).
+
 =====================================================================
 HOTLINK PROTECTION (_check_referer) - berlaku di SEMUA rute (A/B/C):
 =====================================================================
@@ -78,9 +101,11 @@ CATATAN BUAT SESI/AKUN CLAUDE LAIN YANG LANJUTIN PROJECT INI:
   request, dsb) yang beneran gak bisa ditangani logic generik ini,
   tanya dulu ke user sebelum ubah struktur besar - jangan langsung
   refactor karena bisa merusak grup yang sudah lancar.
-- Jangan hapus/ubah TESTING_DOMAINS_NO_REFERER_CHECK atau
-  ALLOWED_REFERER_DOMAIN tanpa diminta eksplisit - itu pemisahan
-  keamanan publik vs testing yang disengaja.
+- Jangan hapus/ubah TESTING_DOMAINS_NO_REFERER_CHECK, PROXY_STREAM_
+  DOMAIN, atau ALLOWED_REFERER_DOMAIN tanpa diminta eksplisit - itu
+  pemisahan keamanan publik vs testing yang disengaja.
+- Jangan aktifkan direct_subresources di channel.json manapun tanpa
+  cek CORS origin-nya dulu.
 =====================================================================
 """
 
