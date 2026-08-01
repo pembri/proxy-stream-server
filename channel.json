@@ -383,7 +383,7 @@
     "user_agent": null,
     "direct_subresources": false,
     "channels": {
-      "trans-tv-1": {
+      "trans-tv": {
         "path": "1312.m3u8",
         "name": "TRANSTV FHD"
       },
@@ -419,7 +419,7 @@
         "path": "436.m3u8",
         "name": "NBA HD"
       },
-      "voli-tv-1": {
+      "voli-tv": {
         "path": "435.m3u8",
         "name": "Voli TV"
       },
@@ -451,7 +451,7 @@
         "path": "1886.m3u8",
         "name": "Fight Sport"
       },
-      "trans-7-1": {
+      "trans-7": {
         "path": "1315.m3u8",
         "name": "TRANS 7 FHD"
       },
@@ -463,7 +463,7 @@
         "path": "1335.m3u8",
         "name": "TVRI"
       },
-      "sctv-1": {
+      "sctv": {
         "path": "1324.m3u8",
         "name": "SCTV FHD"
       },
@@ -471,7 +471,7 @@
         "path": "1322.m3u8",
         "name": "SCTV HD"
       },
-      "inews-1": {
+      "inews": {
         "path": "1336.m3u8",
         "name": "INEWS FHD"
       },
@@ -487,7 +487,7 @@
         "path": "1345.m3u8",
         "name": "TV ONE"
       },
-      "mdtv-1": {
+      "mdtv": {
         "path": "1321.m3u8",
         "name": "MDTV FHD"
       },
@@ -495,7 +495,7 @@
         "path": "1319.m3u8",
         "name": "MDTV HD"
       },
-      "metro-tv-1": {
+      "metro-tv": {
         "path": "1330.m3u8",
         "name": "METROTV FHD"
       },
@@ -503,7 +503,7 @@
         "path": "1328.m3u8",
         "name": "METROTV HD"
       },
-      "kompas-tv-1": {
+      "kompas-tv": {
         "path": "1332.m3u8",
         "name": "KOMPASTV FHD"
       },
@@ -523,7 +523,7 @@
         "path": "1340.m3u8",
         "name": "RTV"
       },
-      "hbo-1": {
+      "hbo": {
         "path": "1363.m3u8",
         "name": "HBO FHD"
       },
@@ -531,7 +531,7 @@
         "path": "1364.m3u8",
         "name": "HBO HD"
       },
-      "hbo-signature-1": {
+      "hbo-signature": {
         "path": "1365.m3u8",
         "name": "HBO Signature FHD"
       },
@@ -539,7 +539,7 @@
         "path": "1366.m3u8",
         "name": "HBO Signature HD"
       },
-      "hbo-hits-1": {
+      "hbo-hits": {
         "path": "1367.m3u8",
         "name": "HBO Hits FHD"
       },
@@ -547,7 +547,7 @@
         "path": "1368.m3u8",
         "name": "HBO Hits HD"
       },
-      "hbo-family-1": {
+      "hbo-family": {
         "path": "1369.m3u8",
         "name": "HBO Family FHD"
       },
@@ -555,7 +555,7 @@
         "path": "1370.m3u8",
         "name": "HBO Family HD"
       },
-      "cinemax-1": {
+      "cinemax": {
         "path": "1372.m3u8",
         "name": "Cinemax by HBO HD"
       },
@@ -603,7 +603,7 @@
         "path": "305.m3u8",
         "name": "Celestial Classic Movies"
       },
-      "tvn-1": {
+      "tvn": {
         "path": "299.m3u8",
         "name": "tvN FHD"
       },
@@ -611,7 +611,7 @@
         "path": "1400.m3u8",
         "name": "TVN HD"
       },
-      "tvn-movies-1": {
+      "tvn-movies": {
         "path": "300.m3u8",
         "name": "tvN Movies FHD"
       },
@@ -619,7 +619,7 @@
         "path": "1401.m3u8",
         "name": "Tvn Movies HD"
       },
-      "axn-1": {
+      "axn": {
         "path": "313.m3u8",
         "name": "AXN FHD"
       },
@@ -631,7 +631,7 @@
         "path": "293.m3u8",
         "name": "IMC FHD"
       },
-      "rock-entertainment-1": {
+      "rock-entertainment": {
         "path": "1416.m3u8",
         "name": "Rock Entertainment FHD"
       },
@@ -639,7 +639,7 @@
         "path": "1404.m3u8",
         "name": "Rock Entertainment HD"
       },
-      "rock-action-1": {
+      "rock-action": {
         "path": "640.m3u8",
         "name": "Rock Action FHD"
       },
@@ -663,7 +663,7 @@
         "path": "1419.m3u8",
         "name": "BBC Lifestyle HD"
       },
-      "hgtv-1": {
+      "hgtv": {
         "path": "1421.m3u8",
         "name": "HGTV FHD"
       },
@@ -703,7 +703,7 @@
         "path": "1438.m3u8",
         "name": "Discovery Asia HD"
       },
-      "discovery-channel-1": {
+      "discovery-channel": {
         "path": "1440.m3u8",
         "name": "Discovery Channel FHD"
       },
@@ -799,7 +799,7 @@
         "path": "76557.m3u8",
         "name": "MUI Tv"
       },
-      "gtv-1": {
+      "gtv": {
         "path": "1318.m3u8",
         "name": "GTV FHD"
       },
@@ -807,7 +807,7 @@
         "path": "31898.m3u8",
         "name": "GTV HD"
       },
-      "mnctv-1": {
+      "mnctv": {
         "path": "1317.m3u8",
         "name": "MNCTV FHD"
       },
@@ -819,7 +819,7 @@
         "path": "25163.m3u8",
         "name": "Moji Tv"
       },
-      "rcti-1": {
+      "rcti": {
         "path": "1964.m3u8",
         "name": "RCTI FHD"
       },
@@ -827,7 +827,7 @@
         "path": "1316.m3u8",
         "name": "RCTI HD"
       },
-      "indosiar-1": {
+      "indosiar": {
         "path": "1327.m3u8",
         "name": "INDOSIAR FHD"
       },
