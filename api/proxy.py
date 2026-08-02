@@ -7,7 +7,7 @@ RUTE YANG TERSEDIA (semua generik, tidak ada percabangan per-grup):
 =====================================================================
 1. Route A - GET /stream-hls/channel/{group}/{slug}/master.m3u8
    Titik masuk "testing" (bentuk path jelas kelihatan ini link
-   streaming). Langsung generate token (24 jam) dan LANGSUNG serve
+   streaming). Langsung generate token (12 jam) dan LANGSUNG serve
    konten di request yang sama - TIDAK redirect 302 ke Route B lagi
    (redirect dihapus karena buang 1 round-trip yang bikin loading
    awal lebih lambat dari perlu).
@@ -47,16 +47,51 @@ Ketiga rute berujung ke method bersama _serve_live(), yang:
     nama file variant baru & sekali-pakai tiap master di-fetch.
 
 CATATAN URL SUB-RESOURCE: semua URL hasil rewrite (segmen, sub-
-playlist, key) SELALU absolute ke PROXY_STREAM_DOMAIN (domain
-testing), BUKAN path relatif - walau master-nya dibuka lewat domain
-publik (api-stream). Ini sengaja (keputusan user): domain publik
-cuma jadi gerbang masuk yang diproteksi Referer, tapi bulk data
-video sesudahnya tetap lewat domain testing yang bebas Referer -
-supaya player yang gak forward Referer ke request susulan (banyak
-begitu) tetap bisa lanjut streaming. KONSEKUENSI: Referer check
-CUMA efektif di titik masuk, bukan di bulk data - trade-off yang
-disadari & diterima, JANGAN diubah balik ke path relatif tanpa
-diminta.
+playlist, key) path RELATIF (bukan absolute ke domain tertentu),
+supaya otomatis resolve ke domain YANG SAMA dengan yang sedang
+diakses (api-stream ATAU proxy-stream-server). Ini SENGAJA diubah
+dari desain sebelumnya (yang sempat absolute ke domain testing) -
+supaya proteksi (Referer + IP binding + User-Agent) konsisten
+berlaku di SEMUA level, dari titik masuk sampai ke segmen/key,
+bukan cuma di titik masuk doang. JANGAN diubah balik ke absolute
+tanpa diminta eksplisit.
+
+CATATAN PROTEKSI TAMBAHAN (selain Referer/Origin):
+- TOKEN_TTL_SECONDS = 12 jam (diperpendek dari 24 jam).
+- IP BINDING: token dibuat dengan menyertakan IP peminta (lihat
+  make_token/verify_token parameter "ip", get_client_ip). Di domain
+  testing, ip="" konsisten (IP binding TIDAK berlaku). Di domain
+  diproteksi (api-stream), ip = IP asli client (dari X-Forwarded-For,
+  fallback X-Real-IP / client_address) - token cuma valid dipakai
+  dari IP yang sama dengan yang minta pertama kali. TRADE-OFF: user
+  di jaringan mobile yang IP-nya berganti di tengah sesi bisa
+  terputus - risiko yang disadari & diterima user.
+- USER-AGENT BLOCKLIST (is_blocked_user_agent, UA_BLOCKLIST_SUBSTRINGS):
+  di domain diproteksi, request dengan User-Agent yang jelas bukan
+  browser (curl, wget, python-requests, dll) atau tanpa User-Agent
+  sama sekali langsung ditolak. Heuristik ringan, BUKAN proteksi kuat.
+- VANITY EXTENSION di Route C: slug boleh dikasih "ekstensi palsu"
+  kosmetik (misal /04/imc.json) buat nyamar lebih jauh - di-strip
+  sebelum lookup channel.json. Slug asli dicoba dulu SEBELUM di-strip
+  (ada slug asli yang beneran mengandung titik, misal channel yang
+  namanya berakhiran titik - jangan asumsikan semua titik di slug
+  adalah ekstensi palsu).
+
+CATATAN PERCOBAAN YANG SUDAH DIBATALKAN (jangan diulang tanpa alasan baru):
+- Content-Type manifest sempat dicoba dibedakan per User-Agent
+  (generik/text-plain untuk browser non-Safari, biar tools sniffing
+  HLS semacam download manager tidak mengenali & tidak auto-merge
+  jadi 1 file) - USER MEMINTA REVERT karena tidak memberi efek yang
+  diinginkan. Sekarang Content-Type SELALU application/vnd.apple.
+  mpegurl untuk semua manifest, di semua domain, tanpa pengecualian.
+  Jangan diaktifkan ulang tanpa diminta eksplisit oleh user.
+- Mode direct_subresources (URL origin asli tanpa proxy) sempat
+  dicoba untuk grup 04 buat mengatasi fragParsingError - GAGAL karena
+  origin (ogietv.biz.id) tidak mengirim header Access-Control-Allow-
+  Origin sama sekali, sehingga browser modern selalu memblokir fetch
+  langsung ke situ. Flag ini tetap ada di kode (siapa tahu berguna
+  untuk origin lain yang CORS-nya terbuka), tapi grup 04 sudah
+  dikembalikan ke direct_subresources: false secara permanen.
 
 CATATAN direct_subresources: flag per-grup di channel.json, kalau
 true sub-playlist/segmen/key TIDAK diproxy sama sekali (langsung ke
@@ -70,16 +105,28 @@ tanpa cek CORS origin-nya dulu (curl -I, cek header
 Access-Control-Allow-Origin).
 
 =====================================================================
-HOTLINK PROTECTION (_check_referer) - berlaku di SEMUA rute (A/B/C):
+HOTLINK PROTECTION (_check_referer + IP binding + UA blocklist) -
+berlaku di SEMUA rute (A/B/C), sengaja pakai path relatif supaya
+konsisten sampai ke sub-resource:
 =====================================================================
 - Domain di TESTING_DOMAINS_NO_REFERER_CHECK (proxy-stream-server.
-  vidiraplay.biz.id) BEBAS diakses tanpa header Referer - domain ini
-  KHUSUS TESTING, TIDAK PERNAH dipublish ke player publik.
+  vidiraplay.biz.id) BEBAS dari SEMUA proteksi ini (Referer, IP
+  binding, UA blocklist) - domain ini KHUSUS TESTING, TIDAK PERNAH
+  dipublish ke player publik.
 - Domain lain (termasuk api-stream.vidiraplay.biz.id, yang DITANAM
-  di website publik) WAJIB header Referer/Origin yang hostname-nya
-  vidiraplay.biz.id atau subdomainnya (ALLOWED_REFERER_DOMAIN).
-  Tanpa itu -> 403. INI BUKAN proteksi mutlak (bisa dipalsukan
-  manual oleh yang paham teknis), cuma menaikkan standar.
+  di website publik) WAJIB:
+  a) Header Referer/Origin yang hostname-nya vidiraplay.biz.id atau
+     subdomainnya (ALLOWED_REFERER_DOMAIN).
+  b) User-Agent yang bukan tools/script jelas (lihat is_blocked_user_agent).
+  c) Request susulan (sub-playlist/segmen/key) dari IP yang SAMA
+     dengan yang generate token di awal (IP binding).
+  Kalau salah satu gagal -> 403. INI BUKAN proteksi mutlak (bisa
+  dipalsukan manual oleh yang paham teknis, dan tools sejenis
+  download-manager browser extension yang mereplay konteks browser
+  asli - Referer/UA/IP sama - tetap bisa lolos, karena dari sudut
+  pandang server itu tidak bisa dibedakan dari request asli), cuma
+  menaikkan standar proteksi terhadap resharing/hotlink dari LUAR
+  sesi/konteks browser asli.
 
 =====================================================================
 CATATAN BUAT SESI/AKUN CLAUDE LAIN YANG LANJUTIN PROJECT INI:
@@ -101,11 +148,18 @@ CATATAN BUAT SESI/AKUN CLAUDE LAIN YANG LANJUTIN PROJECT INI:
   request, dsb) yang beneran gak bisa ditangani logic generik ini,
   tanya dulu ke user sebelum ubah struktur besar - jangan langsung
   refactor karena bisa merusak grup yang sudah lancar.
-- Jangan hapus/ubah TESTING_DOMAINS_NO_REFERER_CHECK, PROXY_STREAM_
-  DOMAIN, atau ALLOWED_REFERER_DOMAIN tanpa diminta eksplisit - itu
-  pemisahan keamanan publik vs testing yang disengaja.
+- Jangan hapus/ubah TESTING_DOMAINS_NO_REFERER_CHECK atau
+  ALLOWED_REFERER_DOMAIN tanpa diminta eksplisit - itu pemisahan
+  keamanan publik vs testing yang disengaja.
 - Jangan aktifkan direct_subresources di channel.json manapun tanpa
   cek CORS origin-nya dulu.
+- Jangan ubah URL sub-resource balik jadi absolute ke domain tertentu
+  - sekarang sengaja path relatif (lihat catatan di atas).
+- Jangan ubah Content-Type manifest jadi kondisional per User-Agent
+  lagi (pernah dicoba, user minta revert - lihat catatan "PERCOBAAN
+  YANG SUDAH DIBATALKAN" di atas).
+- Jangan longgarkan/hapus UA_BLOCKLIST_SUBSTRINGS atau IP binding
+  tanpa diminta eksplisit.
 =====================================================================
 """
 
@@ -336,21 +390,6 @@ def get_client_ip(handler):
     return handler.client_address[0] if handler.client_address else ""
 
 
-def is_safari_ua(ua):
-    """Deteksi Safari ASLI (desktop macOS / iOS) - browser yang gak pakai
-    hls.js, tapi native HLS lewat <video src>. Butuh Content-Type manifest
-    yang BENAR (application/vnd.apple.mpegurl) atau video gagal total.
-    Chrome/Edge/dll di iOS/Android tetap mengandung kata "Safari" di UA-nya,
-    makanya harus dikecualikan eksplisit (deteksi Chrome/CriOS/FxiOS/Edg
-    dulu SEBELUM cek kata Safari)."""
-    if not ua:
-        return False
-    ua_low = ua.lower()
-    if any(x in ua_low for x in ("chrome", "crios", "fxios", "edg", "android")):
-        return False
-    return "safari" in ua_low and "version/" in ua_low
-
-
 class handler(BaseHTTPRequestHandler):
     def _send(self, status, body, content_type="text/plain; charset=utf-8", extra_headers=None):
         if isinstance(body, str):
@@ -432,7 +471,7 @@ class handler(BaseHTTPRequestHandler):
                 return self._send(404, "Channel tidak ditemukan")
             exp = int(time.time()) + TOKEN_TTL_SECONDS
             token = make_token(group, slug, exp, "", ip_for_token)
-            return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token, is_testing=is_testing)
+            return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token)
 
         # --- Route B: URL final (dengan token) ---
         # /stream/live/{group}/{slug}/{file}?exp=...&token=...&u=...[&idx=...]
@@ -443,7 +482,7 @@ class handler(BaseHTTPRequestHandler):
             u = qs.get("u", [""])[0]
             idx_raw = qs.get("idx", [None])[0]
             idx = int(idx_raw) if idx_raw is not None else None
-            return self._serve_live(group, slug, exp, token, u, idx=idx, ip=ip_for_token, is_testing=is_testing)
+            return self._serve_live(group, slug, exp, token, u, idx=idx, ip=ip_for_token)
 
         # --- Route C: vanity URL "API palsu" ---
         # /{group}/{slug}  (contoh: /03/sctv)
@@ -480,7 +519,7 @@ class handler(BaseHTTPRequestHandler):
                 return self._send(404, "Not found")
             exp = int(time.time()) + TOKEN_TTL_SECONDS
             token = make_token(group, slug, exp, "", ip_for_token)
-            return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token, is_testing=is_testing)
+            return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token)
 
     def _reresolve_and_retry(self, group, slug, idx, user_agent):
         """Fetch ulang master ASLI channel ini dari channel.json (fresh,
@@ -511,7 +550,7 @@ class handler(BaseHTTPRequestHandler):
         except Exception:
             return None
 
-    def _serve_live(self, group, slug, exp, token, u, idx=None, ip="", is_testing=False):
+    def _serve_live(self, group, slug, exp, token, u, idx=None, ip=""):
         """Logic inti serve konten (dulu = Route B). Dipanggil langsung dari
         entry point (Route A, tanpa redirect) maupun dari URL /stream/live/...
         yang muncul di dalam playlist hasil rewrite (sub-playlist, segmen).
@@ -554,22 +593,7 @@ class handler(BaseHTTPRequestHandler):
             text = body.decode("utf-8", errors="ignore")
             direct = get_group_direct_subresources(group)
             rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent, is_top_level=is_top_level, direct=direct, ip=ip)
-
-            # Content-Type manifest HLS: di domain testing ATAU buat Safari asli
-            # (native HLS, BUKAN hls.js) WAJIB pakai Content-Type resmi
-            # (application/vnd.apple.mpegurl), kalau tidak video gagal total.
-            # Di domain diproteksi (bukan testing) DAN browser lain (Chrome dkk,
-            # yang pakai hls.js - gak peduli Content-Type, baca body langsung),
-            # sengaja dikasih Content-Type GENERIK (text/plain) - soalnya tools
-            # sniffing HLS (misal download manager) mengenali stream/merakit
-            # otomatis dari Content-Type resmi ini. Dengan Content-Type generik,
-            # tools begitu tidak lagi mengenali ini sebagai manifest HLS.
-            request_ua = self.headers.get("User-Agent", "")
-            if is_testing or is_safari_ua(request_ua):
-                out_content_type = "application/vnd.apple.mpegurl"
-            else:
-                out_content_type = "text/plain; charset=utf-8"
-            return self._send(200, rewritten, out_content_type)
+            return self._send(200, rewritten, "application/vnd.apple.mpegurl")
 
         # Segmen (.ts dll) -> stream langsung, tidak dibuffer penuh ke
         # memori, supaya player lebih cepat mulai nerima data (mengurangi buffering).
