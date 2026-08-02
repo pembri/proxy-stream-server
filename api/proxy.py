@@ -336,6 +336,21 @@ def get_client_ip(handler):
     return handler.client_address[0] if handler.client_address else ""
 
 
+def is_safari_ua(ua):
+    """Deteksi Safari ASLI (desktop macOS / iOS) - browser yang gak pakai
+    hls.js, tapi native HLS lewat <video src>. Butuh Content-Type manifest
+    yang BENAR (application/vnd.apple.mpegurl) atau video gagal total.
+    Chrome/Edge/dll di iOS/Android tetap mengandung kata "Safari" di UA-nya,
+    makanya harus dikecualikan eksplisit (deteksi Chrome/CriOS/FxiOS/Edg
+    dulu SEBELUM cek kata Safari)."""
+    if not ua:
+        return False
+    ua_low = ua.lower()
+    if any(x in ua_low for x in ("chrome", "crios", "fxios", "edg", "android")):
+        return False
+    return "safari" in ua_low and "version/" in ua_low
+
+
 class handler(BaseHTTPRequestHandler):
     def _send(self, status, body, content_type="text/plain; charset=utf-8", extra_headers=None):
         if isinstance(body, str):
@@ -417,7 +432,7 @@ class handler(BaseHTTPRequestHandler):
                 return self._send(404, "Channel tidak ditemukan")
             exp = int(time.time()) + TOKEN_TTL_SECONDS
             token = make_token(group, slug, exp, "", ip_for_token)
-            return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token)
+            return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token, is_testing=is_testing)
 
         # --- Route B: URL final (dengan token) ---
         # /stream/live/{group}/{slug}/{file}?exp=...&token=...&u=...[&idx=...]
@@ -428,7 +443,7 @@ class handler(BaseHTTPRequestHandler):
             u = qs.get("u", [""])[0]
             idx_raw = qs.get("idx", [None])[0]
             idx = int(idx_raw) if idx_raw is not None else None
-            return self._serve_live(group, slug, exp, token, u, idx=idx, ip=ip_for_token)
+            return self._serve_live(group, slug, exp, token, u, idx=idx, ip=ip_for_token, is_testing=is_testing)
 
         # --- Route C: vanity URL "API palsu" ---
         # /{group}/{slug}  (contoh: /03/sctv)
@@ -465,7 +480,7 @@ class handler(BaseHTTPRequestHandler):
                 return self._send(404, "Not found")
             exp = int(time.time()) + TOKEN_TTL_SECONDS
             token = make_token(group, slug, exp, "", ip_for_token)
-            return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token)
+            return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token, is_testing=is_testing)
 
     def _reresolve_and_retry(self, group, slug, idx, user_agent):
         """Fetch ulang master ASLI channel ini dari channel.json (fresh,
@@ -496,7 +511,7 @@ class handler(BaseHTTPRequestHandler):
         except Exception:
             return None
 
-    def _serve_live(self, group, slug, exp, token, u, idx=None, ip=""):
+    def _serve_live(self, group, slug, exp, token, u, idx=None, ip="", is_testing=False):
         """Logic inti serve konten (dulu = Route B). Dipanggil langsung dari
         entry point (Route A, tanpa redirect) maupun dari URL /stream/live/...
         yang muncul di dalam playlist hasil rewrite (sub-playlist, segmen).
@@ -539,7 +554,22 @@ class handler(BaseHTTPRequestHandler):
             text = body.decode("utf-8", errors="ignore")
             direct = get_group_direct_subresources(group)
             rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent, is_top_level=is_top_level, direct=direct, ip=ip)
-            return self._send(200, rewritten, "application/vnd.apple.mpegurl")
+
+            # Content-Type manifest HLS: di domain testing ATAU buat Safari asli
+            # (native HLS, BUKAN hls.js) WAJIB pakai Content-Type resmi
+            # (application/vnd.apple.mpegurl), kalau tidak video gagal total.
+            # Di domain diproteksi (bukan testing) DAN browser lain (Chrome dkk,
+            # yang pakai hls.js - gak peduli Content-Type, baca body langsung),
+            # sengaja dikasih Content-Type GENERIK (text/plain) - soalnya tools
+            # sniffing HLS (misal download manager) mengenali stream/merakit
+            # otomatis dari Content-Type resmi ini. Dengan Content-Type generik,
+            # tools begitu tidak lagi mengenali ini sebagai manifest HLS.
+            request_ua = self.headers.get("User-Agent", "")
+            if is_testing or is_safari_ua(request_ua):
+                out_content_type = "application/vnd.apple.mpegurl"
+            else:
+                out_content_type = "text/plain; charset=utf-8"
+            return self._send(200, rewritten, out_content_type)
 
         # Segmen (.ts dll) -> stream langsung, tidak dibuffer penuh ke
         # memori, supaya player lebih cepat mulai nerima data (mengurangi buffering).
