@@ -439,9 +439,28 @@ class handler(BaseHTTPRequestHandler):
         # Domain yang dipakai buat rute ini: api-stream.vidiraplay.biz.id
         # (didaftarkan sebagai custom domain terpisah di Vercel, tapi
         # tetap 1 project/deployment yang sama dengan proxy-stream-server).
+        #
+        # Slug boleh dikasih "ekstensi palsu" biar makin nyamar (misal
+        # /04/imc.json, /04/imc.txt) - ekstensi ini SEKEDAR kosmetik,
+        # di-strip sebelum lookup ke channel.json, TIDAK mempengaruhi
+        # konten yang dikirim balik (tetap m3u8 asli). /04/imc (tanpa
+        # ekstensi) tetap jalan seperti biasa juga.
+        #
+        # PENTING: slug ASLI dicoba dulu apa adanya SEBELUM di-strip -
+        # soalnya ada slug asli yang beneran mengandung titik (contoh:
+        # "euronews." di grup 03, titiknya bagian dari nama channel,
+        # BUKAN ekstensi palsu). Kalau lookup slug asli gagal, baru
+        # coba strip bagian setelah titik terakhir sebagai fallback.
         if len(parts) == 2:
-            group, slug = parts[0], parts[1]
+            group, raw_slug = parts[0], parts[1]
+            slug = raw_slug
             origin_url, _ = get_channel_origin(group, slug)
+            if not origin_url and "." in raw_slug:
+                stripped = raw_slug.rsplit(".", 1)[0]
+                stripped_origin, _ = get_channel_origin(group, stripped)
+                if stripped_origin:
+                    slug = stripped
+                    origin_url = stripped_origin
             if not origin_url:
                 return self._send(404, "Not found")
             exp = int(time.time()) + TOKEN_TTL_SECONDS
