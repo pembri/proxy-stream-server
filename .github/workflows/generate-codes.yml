@@ -1,0 +1,49 @@
+# .github/workflows/generate-codes.yml
+#
+# Workflow MANUAL SAJA (tidak pernah trigger otomatis) buat me-refresh
+# SEMUA kode acak channel sekaligus (termasuk yang sudah ada) - bikin
+# semua URL gerbang masuk lama otomatis basi/invalid begitu commit ini
+# masuk. Dipakai kalau user mau "reset" URL secara berkala/sewaktu-waktu.
+#
+# Cara jalanin: buka tab "Actions" di GitHub -> pilih workflow
+# "Generate Codes (Manual Refresh)" -> klik "Run workflow".
+#
+# Setelah generate_codes.py --refresh-all, playlist di-generate ulang
+# juga (playlist.m3u8, playlist-original.m3u8, playlist-referer.m3u8)
+# supaya sinkron pakai kode yang baru, lalu semuanya di-commit sekaligus.
+
+name: Generate Codes (Manual Refresh)
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Refresh SEMUA kode channel (semua URL lama jadi basi)
+        run: python3 scripts/generate_codes.py --refresh-all
+
+      - name: Generate ulang playlist pakai kode baru
+        run: python3 scripts/generate_playlists.py
+
+      - name: Commit & push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add channel_codes.json playlist.m3u8 playlist-original.m3u8 playlist-referer.m3u8
+          git commit -m "chore: refresh SEMUA kode channel (manual trigger) [skip ci]"
+          git push
