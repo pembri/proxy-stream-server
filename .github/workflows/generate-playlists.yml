@@ -1,8 +1,12 @@
 # .github/workflows/generate-playlists.yml
 #
-# Otomatis generate ulang playlist.m3u8, playlist-original.m3u8, dan
-# playlist-referer.m3u8 setiap kali channel.json berubah (nambah,
-# ubah, atau hapus channel/grup), lalu commit hasilnya balik ke repo.
+# Otomatis jalan tiap channel.json berubah (nambah, ubah, atau hapus
+# channel/grup):
+#   1. Jalanin generate_codes.py (mode FILL-MISSING) - channel baru
+#      otomatis dapet kode acak, channel lama TIDAK diubah kodenya.
+#   2. Jalanin generate_playlists.py - generate ulang playlist.m3u8,
+#      playlist-original.m3u8, playlist-referer.m3u8 pakai kode terbaru.
+#   3. Commit channel_codes.json + ketiga file playlist balik ke repo.
 #
 # Setelah commit ini masuk, Vercel (yang connect ke repo GitHub ini)
 # otomatis redeploy, dan ketiga file playlist langsung bisa diakses
@@ -11,9 +15,10 @@
 #   https://proxy-stream-server.vidiraplay.biz.id/playlist-original.m3u8
 #   https://proxy-stream-server.vidiraplay.biz.id/playlist-referer.m3u8
 #
-# CATATAN: workflow ini TIDAK menyentuh api/proxy.py atau logic proxy
-# sama sekali - cuma baca channel.json, lalu tulis ulang 3 file
-# playlist di root repo.
+# CATATAN: workflow ini TIDAK PERNAH me-refresh kode channel yang sudah
+# ada (itu tugas .github/workflows/generate-codes.yml, trigger MANUAL
+# saja) - workflow ini cuma nambahin kode buat channel BARU. Juga TIDAK
+# menyentuh api/proxy.py atau logic proxy sama sekali.
 
 name: Generate Playlists
 
@@ -23,6 +28,7 @@ on:
     paths:
       - "channel.json"
       - "scripts/generate_playlists.py"
+      - "scripts/generate_codes.py"
   workflow_dispatch: {}
 
 permissions:
@@ -42,6 +48,9 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Generate kode buat channel baru (fill-missing, TIDAK refresh yang lama)
+        run: python3 scripts/generate_codes.py
+
       - name: Generate playlist.m3u8, playlist-original.m3u8, playlist-referer.m3u8
         run: python3 scripts/generate_playlists.py
 
@@ -49,10 +58,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add playlist.m3u8 playlist-original.m3u8 playlist-referer.m3u8
+          git add channel_codes.json playlist.m3u8 playlist-original.m3u8 playlist-referer.m3u8
           if git diff --cached --quiet; then
-            echo "Tidak ada perubahan pada playlist, skip commit."
+            echo "Tidak ada perubahan, skip commit."
           else
-            git commit -m "chore: auto-generate playlist files [skip ci]"
+            git commit -m "chore: auto-generate codes & playlist files [skip ci]"
             git push
           fi
