@@ -192,6 +192,32 @@ CHANNELS_PATH = os.path.join(os.path.dirname(__file__), "..", "channel.json")
 with open(CHANNELS_PATH, "r", encoding="utf-8") as f:
     CHANNELS = json.load(f)
 
+# channel_codes.json: mapping {group: {slug: kode_acak}}. Dipakai buat
+# gerbang masuk baru yang menggabungkan {group}{kode} jadi 1 string tanpa
+# pemisah (contoh: grup "01" + kode "d2c68a3d..." -> path "01d2c68a3d...").
+# File ini OPSIONAL - kalau belum ada/kosong, rute yang menggunakan kode
+# (Route D/E) otomatis nonaktif (404), tapi rute lama (A/B/C) tetap jalan.
+CODES_PATH = os.path.join(os.path.dirname(__file__), "..", "channel_codes.json")
+try:
+    with open(CODES_PATH, "r", encoding="utf-8") as f:
+        CHANNEL_CODES = json.load(f)
+except FileNotFoundError:
+    CHANNEL_CODES = {}
+
+# Reverse index: "{group}{kode}" -> (group, slug). Dibangun sekali saat
+# cold start (module load), bukan tiap request - murah karena jumlah
+# channel kecil (ratusan, bukan jutaan).
+COMBINED_TO_GROUP_SLUG = {}
+for _group, _slugmap in CHANNEL_CODES.items():
+    for _slug, _code in _slugmap.items():
+        COMBINED_TO_GROUP_SLUG[f"{_group}{_code}"] = (_group, _slug)
+
+
+def resolve_combined(combined):
+    """Resolve string gabungan {group}{kode} jadi (group, slug) asli.
+    Return (None, None) kalau gak ketemu (kode salah/basi/sudah di-refresh)."""
+    return COMBINED_TO_GROUP_SLUG.get(combined, (None, None))
+
 
 def make_token(group, slug, exp, u="", ip=""):
     """ip="" (string kosong) dipakai konsisten kalau domain testing (IP
@@ -516,6 +542,39 @@ class handler(BaseHTTPRequestHandler):
                     slug = stripped
                     origin_url = stripped_origin
             if not origin_url:
+                return self._send(404, "Not found")
+            exp = int(time.time()) + TOKEN_TTL_SECONDS
+            token = make_token(group, slug, exp, "", ip_for_token)
+            return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token)
+
+        # --- Route D: gerbang masuk baru, format "assets" ---
+        # /assets/ch/{group}{kode}.json  (contoh: /assets/ch/01d2c68a3d....json)
+        # {group}{kode} digabung TANPA pemisah (lihat resolve_combined) biar
+        # batas antara grup & kode gak kelihatan. Ekstensi ".json" cuma
+        # kosmetik, di-strip sebelum resolve. Sengaja beda struktur dari
+        # Route C lama (/{group}/{slug}) - keduanya tetap aktif berdampingan
+        # kecuali diminta dihapus.
+        if len(parts) == 3 and parts[0] == "assets" and parts[1] == "ch":
+            raw = parts[2]
+            combined = raw.rsplit(".", 1)[0] if "." in raw else raw
+            group, slug = resolve_combined(combined)
+            if not group:
+                return self._send(404, "Not found")
+            exp = int(time.time()) + TOKEN_TTL_SECONDS
+            token = make_token(group, slug, exp, "", ip_for_token)
+            return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token)
+
+        # --- Route E: gerbang masuk baru, format "hls" ---
+        # /hls/ch/{group}{kode}/master.m3u8
+        # Dipakai di DUA domain sekaligus: api-stream (full protection -
+        # Referer+IP+UA wajib, lihat pengecekan di awal do_GET) dan
+        # proxy-stream-server (testing, cuma token+exp - lihat
+        # TESTING_DOMAINS_NO_REFERER_CHECK). Path-nya SAMA di kedua domain,
+        # yang beda cuma level proteksinya (ditentukan dari Host header).
+        if len(parts) == 4 and parts[0] == "hls" and parts[1] == "ch" and parts[3] == "master.m3u8":
+            combined = parts[2]
+            group, slug = resolve_combined(combined)
+            if not group:
                 return self._send(404, "Not found")
             exp = int(time.time()) + TOKEN_TTL_SECONDS
             token = make_token(group, slug, exp, "", ip_for_token)
