@@ -219,6 +219,18 @@ def resolve_combined(combined):
     return COMBINED_TO_GROUP_SLUG.get(combined, (None, None))
 
 
+def get_combined_code(group, slug):
+    """Ambil kode gabungan {group}{kode} buat channel ini kalau ada di
+    channel_codes.json, None kalau belum di-generate (channel baru yang
+    belum sempat dijalankan generate_codes.py-nya). Dipakai supaya URL
+    sub-resource (key, segment, sub-playlist) hasil rewrite_playlist/
+    rewrite_key_line JUGA pakai kode tersamar, bukan nyebut group/slug
+    asli apa adanya - konsisten dengan gerbang masuk (Route D/E) yang
+    sudah tersamar."""
+    code = CHANNEL_CODES.get(group, {}).get(slug)
+    return f"{group}{code}" if code else None
+
+
 def make_token(group, slug, exp, u="", ip=""):
     """ip="" (string kosong) dipakai konsisten kalau domain testing (IP
     binding TIDAK berlaku di situ). Kalau domain diproteksi (api-stream),
@@ -324,7 +336,9 @@ def rewrite_key_line(line, base, group, slug, exp, ip="", direct=False):
         u = encode_u(abs_key_url)
         new_token = make_token(group, slug, exp, u, ip)
         query = urllib.parse.urlencode({"exp": exp, "token": new_token, "u": u})
-        proxied = f"/stream/live/{group}/{slug}/key?{query}"
+        combined = get_combined_code(group, slug)
+        prefix = f"ch/{combined}" if combined else f"{group}/{slug}"
+        proxied = f"/stream/live/{prefix}/key?{query}"
         return f'URI="{proxied}"'
     return KEY_URI_RE.sub(replace, line)
 
@@ -383,8 +397,13 @@ def rewrite_playlist(body_text, origin_url, group, slug, exp, token, user_agent,
         # Path RELATIF (bukan absolute ke domain tertentu) - biar otomatis
         # resolve ke domain yang sama dengan yang sedang diakses (api-stream
         # ATAU proxy-stream-server), supaya proteksi (Referer/IP/UA) di
-        # domain itu ikut berlaku konsisten untuk request susulan.
-        proxied = f"/stream/live/{group}/{slug}/{filename}?{query}"
+        # domain itu ikut berlaku konsisten untuk request susulan. Pakai
+        # kode gabungan (ch/{group}{kode}) kalau tersedia di channel_codes.json,
+        # biar nama channel asli gak kelihatan di URL sub-resource juga -
+        # fallback ke {group}/{slug} polos kalau channel belum punya kode.
+        combined = get_combined_code(group, slug)
+        prefix = f"ch/{combined}" if combined else f"{group}/{slug}"
+        proxied = f"/stream/live/{prefix}/{filename}?{query}"
         out_lines.append(proxied)
         idx += 1
     return "\n".join(out_lines)
@@ -500,9 +519,16 @@ class handler(BaseHTTPRequestHandler):
             return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token)
 
         # --- Route B: URL final (dengan token) ---
-        # /stream/live/{group}/{slug}/{file}?exp=...&token=...&u=...[&idx=...]
+        # Bentuk LAMA: /stream/live/{group}/{slug}/{file}?exp=...&token=...[&u=...][&idx=...]
+        # Bentuk BARU: /stream/live/ch/{group}{kode}/{file}?exp=...&token=...[&u=...][&idx=...]
+        # (nama channel asli disamarkan pakai kode gabungan, lihat get_combined_code)
         if len(parts) >= 5 and parts[0] == "stream" and parts[1] == "live":
-            group, slug = parts[2], parts[3]
+            if parts[2] == "ch":
+                group, slug = resolve_combined(parts[3])
+                if not group:
+                    return self._send(404, "Not found")
+            else:
+                group, slug = parts[2], parts[3]
             exp = qs.get("exp", [None])[0]
             token = qs.get("token", [None])[0]
             u = qs.get("u", [""])[0]
