@@ -97,22 +97,88 @@ https://proxy-stream-server.vidiraplay.biz.id/hls/ch/01892a5768516bb01bc23b909e4
 https://proxy-stream-server.vidiraplay.biz.id/hls/ch/01bbe1ce7c351893234b3874fb90e720f9/master.m3u8
 #EXTINF:-1 group-title="Grup 01",Zoo Moo
 https://proxy-stream-server.vidiraplay.biz.id/hls/ch/010fb5cd046351f595b49aca75d1637410/master.m3u8
+#EXTINF:-1 group-title="Grup 02",ABC News
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02246fb974aab75fa1eee2872176db3d98/master.m3u8
+#EXTINF:-1 group-title="Grup 02",Al-Jazeera English
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02419487980e4d26a90d3f2d59b2fea68c/master.m3u8
+#EXTINF:-1 group-title="Grup 02",Arirang
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02b2f87a94139f01a0ded898db9ae63394/master.m3u8
+#EXTINF:-1 group-title="Grup 02",Berita Satu
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02de01bfdc1c4b75955cdd52df2d5a6c0d/master.m3u8
+#EXTINF:-1 group-title="Grup 02",BTV
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02da33027cba9594e446f2e152996ca633/master.m3u8
+#EXTINF:-1 group-title="Grup 02",CCTV 4
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02ea55305249f19fd859cd73db6d16dade/master.m3u8
+#EXTINF:-1 group-title="Grup 02",CGTN
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/029aab54d31fbbf93569ea14ab5de5c558/master.m3u8
+#EXTINF:-1 group-title="Grup 02",CGTN Documentary
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/020a72405322c8dd30257798c39e2fb7f6/master.m3u8
+#EXTINF:-1 group-title="Grup 02",China Travel
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02c8131175e88ed8a65eca99aa9480ed15/master.m3u8
+#EXTINF:-1 group-title="Grup 02",CNA
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02eaaa458c23e1aeb486bb1caaed7cac8a/master.m3u8
 #EXTINF:-1 group-title="Grup 02",CNBC Indonesia
 https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02d4cb08b0ceab9d3ccbc7fd6f93cda1a0/master.m3u8
 #EXTINF:-1 group-title="Grup 02",CNN Indonesia
 https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02fff3069287eb77134c0bc1c162f54fe4/master.m3u8
+#EXTINF:-1 group-title="Grup 02",DAAI TV
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02b46e09b443556cd9ad7935a49b201628/master.m3u8
+#EXTINF:-1 group-title="Grup 02",DMI TV
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/021648ffb7f2fb0132a17cfa7ba85f3700/master.m3u8
+#EXTINF:-1 group-title="Grup 02",DW News
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02db6dd348e109d7a0de1472892cb16050/master.m3u8
+#EXTINF:-1 group-title="Grup 02",France24 English
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02ea0e9aa8cd9587d63850ac95bf0db3a3/master.m3u8
+#EXTINF:-1 group-title="Grup 02",Freedom
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02ae00fd4dd30e451fd8d4a9d2bb66a9c5/master.m3u8
+#EXTINF:-1 group-title="Grup 02",Garuda TV
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/0217a41cea0f482e2f0b2cc1f994a26aca/master.m3u8
 #EXTINF:-1 group-title="Grup 02",GTV
 https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02a533a8e49d21eddf2c46a73206640bdc/master.m3u8
+#EXTINF:-1 group-title="Grup 02",Indonesiana TV
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/022dae3139b0f084ccf76aa7005ca97613/master.m3u8
 #EXTINF:-1 group-title="Grup 02",iNews
 https://proxy-stream-server.vidiraplay.biz.id/hls/ch/0200a7ae63b3fc8b9b8ace51f53edea35d/master.m3u8
+#EXTINF:-1 group-title="Grup 02",JTV
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/021177a5f768fb263db0c238524c074207/master.m3u8
+#EXTINF:-1 group-title="Grup 02",KBS World
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02685b006fc5aafdd9004547d1bdaf559c/master.m3u8
+#EXTINF:-1 group-title="Grup 02",Magna Channel
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/0274db9cc4388652ad1ab34f7c55cc9851/master.m3u8
+#EXTINF:-1 group-title="Grup 02",Metro TV
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02cbd85c58df08fc506a74b1f7f3038629/master.m3u8
 #EXTINF:-1 group-title="Grup 02",MNCTV
 https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02e040ae323fe2ad1ce9d9c245d685f074/master.m3u8
+#EXTINF:-1 group-title="Grup 02",Moonbug
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/022d4a436bf41ab849fc5b4b09926bb55f/master.m3u8
+#EXTINF:-1 group-title="Grup 02",MQTV
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/023acdad14b0f15e7ab4110ebe62c6881f/master.m3u8
+#EXTINF:-1 group-title="Grup 02",NHK World Japan
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/020a27541565868650269e8492003b6f60/master.m3u8
+#EXTINF:-1 group-title="Grup 02",Nusantara TV
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/0284dd03afe2135767f9dae16cc3e8caf8/master.m3u8
 #EXTINF:-1 group-title="Grup 02",RCTI
 https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02c9468ba61ff18b46bb482661eae1e8e5/master.m3u8
+#EXTINF:-1 group-title="Grup 02",Rodja TV
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/0218dcdf6ee9fbeff5979851c9a390239d/master.m3u8
+#EXTINF:-1 group-title="Grup 02",RTV
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/0215ecd29cfa57c867a95f3e6491b6934a/master.m3u8
+#EXTINF:-1 group-title="Grup 02",The Indonesia Channel
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/024b843e9f6eef4c5223efa1acd76153ce/master.m3u8
 #EXTINF:-1 group-title="Grup 02",Trans 7
 https://proxy-stream-server.vidiraplay.biz.id/hls/ch/021f7ed675dabae2b0556c2350721581b1/master.m3u8
 #EXTINF:-1 group-title="Grup 02",Trans TV
 https://proxy-stream-server.vidiraplay.biz.id/hls/ch/0222e533dc315f519f2b50e92c15278b18/master.m3u8
+#EXTINF:-1 group-title="Grup 02",TRT World
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/021b5b8071e6d302e49b6e00f5f8bdbcf9/master.m3u8
+#EXTINF:-1 group-title="Grup 02",TV5 Monde Info
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02a8d3cb84b34bbbbcd3a9df921ad2c456/master.m3u8
+#EXTINF:-1 group-title="Grup 02",TV9 Nusantara
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02457f7946c7104a28df9ba4d570d2d883/master.m3u8
+#EXTINF:-1 group-title="Grup 02",TVRI World
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/021eccac50f385d1a9abcc8993c821df1a/master.m3u8
+#EXTINF:-1 group-title="Grup 02",Wion
+https://proxy-stream-server.vidiraplay.biz.id/hls/ch/02f69a75a86e6254f4659a08d22c2506a3/master.m3u8
 #EXTINF:-1 group-title="Grup 03",African News
 https://proxy-stream-server.vidiraplay.biz.id/hls/ch/03b619ce23d3746aab895357e3acb812f4/master.m3u8
 #EXTINF:-1 group-title="Grup 03",AJWA TV

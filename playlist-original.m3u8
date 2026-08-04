@@ -97,22 +97,88 @@ http://103.148.44.38:8001/play/a023/index.m3u8
 http://103.148.44.38:8001/play/a030/index.m3u8
 #EXTINF:-1 group-title="Grup 01",Zoo Moo
 http://103.148.44.38:8001/play/a052/index.m3u8
+#EXTINF:-1 group-title="Grup 02",ABC News
+https://abc-news-dmd-streams-1.akamaized.net/out/v1/701126012d044971b3fa89406a440133/index.m3u8
+#EXTINF:-1 group-title="Grup 02",Al-Jazeera English
+https://live-hls-web-aje-gcp.thehlive.com/AJE/index.m3u8
+#EXTINF:-1 group-title="Grup 02",Arirang
+http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",Berita Satu
+https://lnd0t3b922.tenbytecdn.com/ta-sg1/89c624c5-4b4f-473c-b50d-1a156a1c0174/master.m3u8
+#EXTINF:-1 group-title="Grup 02",BTV
+https://lnd0t3b922.tenbytecdn.com/ta-sg1/90369cf5-6ac2-411d-b3d0-15fae10a2e2c/master.m3u8
+#EXTINF:-1 group-title="Grup 02",CCTV 4
+http://74.91.26.218:82/live/cctv4hd.m3u8
+#EXTINF:-1 group-title="Grup 02",CGTN
+https://amg00405-rakutentv-cgtn-rakuten-i9tar.amagi.tv/master.m3u8
+#EXTINF:-1 group-title="Grup 02",CGTN Documentary
+https://amg00405-rakutentv-cgtndocumentary-rakuten-0ql8j.amagi.tv/master.m3u8
+#EXTINF:-1 group-title="Grup 02",China Travel
+https://amg01314-amg01314c7-distrotv-us-10219.playouts.now.amagi.tv/playlist/amg01314-cgtn-cgtnchinatravel-distrotvus/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",CNA
+https://d2e1asnsl7br7b.cloudfront.net/7782e205e72f43aeb4a48ec97f66ebbe/index.m3u8
 #EXTINF:-1 group-title="Grup 02",CNBC Indonesia
 https://cdn-transmedia-server.vidiraplay.biz.id/stream-hls/cnbc-indonesia/master.m3u8
 #EXTINF:-1 group-title="Grup 02",CNN Indonesia
 https://cdn-transmedia-server.vidiraplay.biz.id/stream-hls/cnn-indonesia/master.m3u8
+#EXTINF:-1 group-title="Grup 02",DAAI TV
+https://pull.daaiplus.com/live-DAAIPLUS/live-DAAIPLUS_HD.m3u8
+#EXTINF:-1 group-title="Grup 02",DMI TV
+https://tvstreamcast.com/tawaftv.m3u8
+#EXTINF:-1 group-title="Grup 02",DW News
+https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/master.m3u8
+#EXTINF:-1 group-title="Grup 02",France24 English
+https://live.france24.com/hls/live/2037218-b/F24_EN_HI_HLS/master_5000.m3u8
+#EXTINF:-1 group-title="Grup 02",Freedom
+https://dash4.antik.sk/live/test_uatv/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",Garuda TV
+https://hgmtv.com:19360/garudatvlivestreaming/garudatvlivestreaming.m3u8
 #EXTINF:-1 group-title="Grup 02",GTV
 https://cdn-server-rctiplus.vidiraplay.biz.id/stream-hls/gtv/index.m3u8
+#EXTINF:-1 group-title="Grup 02",Indonesiana TV
+https://tvstreamcast.com/indonesiana.m3u8
 #EXTINF:-1 group-title="Grup 02",iNews
 https://cdn-server-rctiplus.vidiraplay.biz.id/stream-hls/inews/index.m3u8
+#EXTINF:-1 group-title="Grup 02",JTV
+http://122.248.43.242:1935/JTVSURABAYA/_definst_/myStream/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",KBS World
+https://stream8.cinerama.uz/1448/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",Magna Channel
+https://edge.medcom.id/live-edge/smil:magna.smil/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",Metro TV
+https://edge.medcom.id/live-edge/smil:metro.smil/playlist.m3u8
 #EXTINF:-1 group-title="Grup 02",MNCTV
 https://cdn-server-rctiplus.vidiraplay.biz.id/stream-hls/mnctv/index.m3u8
+#EXTINF:-1 group-title="Grup 02",Moonbug
+https://moonbug-rokuus.amagi.tv/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",MQTV
+https://5bf7b725107e5.streamlock.net/mqtv/mqtv/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",NHK World Japan
+https://nhk.lls.pbs.org/index.m3u8
+#EXTINF:-1 group-title="Grup 02",Nusantara TV
+https://nusantaratv.siar.us/nusantaratv/live/playlist.m3u8
 #EXTINF:-1 group-title="Grup 02",RCTI
 https://cdn-server-rctiplus.vidiraplay.biz.id/stream-hls/rcti/index.m3u8
+#EXTINF:-1 group-title="Grup 02",Rodja TV
+https://rodjatv.com/rodjatv/live.m3u8
+#EXTINF:-1 group-title="Grup 02",RTV
+https://rtvstream.rtv.co.id:4555/hls/rtv.m3u8
+#EXTINF:-1 group-title="Grup 02",The Indonesia Channel
+https://restreamer.indonusa.id:8443/d5f4ad43-1b5a-4b0f-8bef-5b37224ed221.m3u8
 #EXTINF:-1 group-title="Grup 02",Trans 7
 https://cdn-transmedia-server.vidiraplay.biz.id/stream-hls/trans7/master.m3u8
 #EXTINF:-1 group-title="Grup 02",Trans TV
 https://cdn-transmedia-server.vidiraplay.biz.id/stream-hls/transtv/master.m3u8
+#EXTINF:-1 group-title="Grup 02",TRT World
+https://tv-trtworld.medya.trt.com.tr/master_1440.m3u8
+#EXTINF:-1 group-title="Grup 02",TV5 Monde Info
+https://ott.tv5monde.com/Content/HLS/Live/channel(info)/variant.m3u8
+#EXTINF:-1 group-title="Grup 02",TV9 Nusantara
+https://5bf7b725107e5.streamlock.net/tv9/tv9/playlist.m3u8
+#EXTINF:-1 group-title="Grup 02",TVRI World
+https://ott-balancer.tvri.go.id/live/eds/Nasional/hls/Nasional.m3u8
+#EXTINF:-1 group-title="Grup 02",Wion
+http://vg-zeefta.akamaized.net/ptnr-yupptv/title-wion/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/20c3c0d9-0256-43fe-bca6-70fdd490b957/main.m3u8
 #EXTINF:-1 group-title="Grup 03",African News
 https://cdn-server-vidio.vidiraplay.biz.id/stream-hls/12784/master.m3u8
 #EXTINF:-1 group-title="Grup 03",AJWA TV
