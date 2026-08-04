@@ -10,7 +10,8 @@
     "Key '_readme' ini cuma catatan, aman diabaikan program.",
     "UPDATE: grup 02 sudah diganti total (sumber lama 103.58.160.157 mati). Sumber baru per-channel beda domain (cdn-server-rctiplus.vidiraplay.biz.id & cdn-transmedia-server.vidiraplay.biz.id), makanya base_url grup 02 dikosongkan (\"\") dan tiap channel pakai URL absolute penuh di field 'path'. Ini valid dan tidak butuh perubahan proxy.py (base_url + path = \"\" + full_url = full_url).",
     "Grup 03: sumber cdn-server-vidio.vidiraplay.biz.id (proxy dari Vidio, worker sudah handle audio-track rewrite sendiri, TIDAK butuh User-Agent khusus). PENTING: slug 'btv' di sini adalah channel BTV asli (bukan Berita Satu) - jangan disamakan/ketuker dengan channel Berita Satu yang punya slug 'berita-satu' sendiri, keduanya channel yang BEDA meski sama-sama disingkat 'BTV' secara umum. Begitu juga 'musica' (grup 03) BEDA dengan 'musik-indonesia' (grup 01) - dua channel musik yang berbeda.",
-    "Grup 04: sumber ogietv.biz.id (AES-128 encrypted HLS - lihat KEY_URI_RE di proxy.py yang nge-rewrite URI di baris #EXT-X-KEY, WAJIB ada supaya dekripsi jalan lewat proxy). Penamaan slug: channel yang punya varian FHD & HD dapet akhiran -1 (FHD) dan -2 (HD) - misal trans-tv-1 (FHD), trans-tv-2 (HD). Channel yang cuma 1 varian gak pakai akhiran. CGTN Documentary di sumber ini sebenarnya cuma CGTN biasa (nama sumbernya salah), jadi slug+nama-nya 'cgtn' bukan 'cgtn-documentary'."
+    "Grup 04: sumber ogietv.biz.id (AES-128 encrypted HLS - lihat KEY_URI_RE di proxy.py yang nge-rewrite URI di baris #EXT-X-KEY, WAJIB ada supaya dekripsi jalan lewat proxy). Penamaan slug: channel yang punya varian FHD & HD dapet akhiran -1 (FHD) dan -2 (HD) - misal trans-tv-1 (FHD), trans-tv-2 (HD). Channel yang cuma 1 varian gak pakai akhiran. CGTN Documentary di sumber ini sebenarnya cuma CGTN biasa (nama sumbernya salah), jadi slug+nama-nya 'cgtn' bukan 'cgtn-documentary'.",
+    "Grup 02 update: ditambah 33 channel dari sumber official langsung (masing-masing domain berbeda-beda, base_url tetap \"\" + full URL absolute di path, sama seperti 8 channel awal grup 02). 'U Channel' (srs.u-channel.tv) di-skip karena 404 mati saat ditest. CGTN dan CGTN Documentary di grup 02 ini BEDA channel (URL beda, dikonfirmasi user) - jangan disamakan kayak kasus grup 04 dulu. CCTV 4 (grup 02) BEDA dari CCTV 4 Asia (grup 03) - nama beda, dianggap channel beda."
   ],
   "01": {
     "base_url": "http://103.148.44.38:8001",
@@ -249,6 +250,138 @@
       "cnbc-indonesia": {
         "path": "https://cdn-transmedia-server.vidiraplay.biz.id/stream-hls/cnbc-indonesia/master.m3u8",
         "name": "CNBC Indonesia"
+      },
+      "the-indonesia-channel": {
+        "path": "https://restreamer.indonusa.id:8443/d5f4ad43-1b5a-4b0f-8bef-5b37224ed221.m3u8",
+        "name": "The Indonesia Channel"
+      },
+      "daai-tv": {
+        "path": "https://pull.daaiplus.com/live-DAAIPLUS/live-DAAIPLUS_HD.m3u8",
+        "name": "DAAI TV"
+      },
+      "garuda-tv": {
+        "path": "https://hgmtv.com:19360/garudatvlivestreaming/garudatvlivestreaming.m3u8",
+        "name": "Garuda TV"
+      },
+      "jtv": {
+        "path": "http://122.248.43.242:1935/JTVSURABAYA/_definst_/myStream/playlist.m3u8",
+        "name": "JTV"
+      },
+      "magna-channel": {
+        "path": "https://edge.medcom.id/live-edge/smil:magna.smil/playlist.m3u8",
+        "name": "Magna Channel"
+      },
+      "tvri-world": {
+        "path": "https://ott-balancer.tvri.go.id/live/eds/Nasional/hls/Nasional.m3u8",
+        "name": "TVRI World"
+      },
+      "dmi-tv": {
+        "path": "https://tvstreamcast.com/tawaftv.m3u8",
+        "name": "DMI TV"
+      },
+      "mqtv": {
+        "path": "https://5bf7b725107e5.streamlock.net/mqtv/mqtv/playlist.m3u8",
+        "name": "MQTV"
+      },
+      "metro-tv": {
+        "path": "https://edge.medcom.id/live-edge/smil:metro.smil/playlist.m3u8",
+        "name": "Metro TV"
+      },
+      "rodja-tv": {
+        "path": "https://rodjatv.com/rodjatv/live.m3u8",
+        "name": "Rodja TV"
+      },
+      "tv9-nusantara": {
+        "path": "https://5bf7b725107e5.streamlock.net/tv9/tv9/playlist.m3u8",
+        "name": "TV9 Nusantara"
+      },
+      "indonesiana-tv": {
+        "path": "https://tvstreamcast.com/indonesiana.m3u8",
+        "name": "Indonesiana TV"
+      },
+      "berita-satu": {
+        "path": "https://lnd0t3b922.tenbytecdn.com/ta-sg1/89c624c5-4b4f-473c-b50d-1a156a1c0174/master.m3u8",
+        "name": "Berita Satu"
+      },
+      "btv": {
+        "path": "https://lnd0t3b922.tenbytecdn.com/ta-sg1/90369cf5-6ac2-411d-b3d0-15fae10a2e2c/master.m3u8",
+        "name": "BTV"
+      },
+      "rtv": {
+        "path": "https://rtvstream.rtv.co.id:4555/hls/rtv.m3u8",
+        "name": "RTV"
+      },
+      "nusantara-tv": {
+        "path": "https://nusantaratv.siar.us/nusantaratv/live/playlist.m3u8",
+        "name": "Nusantara TV"
+      },
+      "abc-news": {
+        "path": "https://abc-news-dmd-streams-1.akamaized.net/out/v1/701126012d044971b3fa89406a440133/index.m3u8",
+        "name": "ABC News"
+      },
+      "aljazeera-english": {
+        "path": "https://live-hls-web-aje-gcp.thehlive.com/AJE/index.m3u8",
+        "name": "Al-Jazeera English"
+      },
+      "cgtn-documentary": {
+        "path": "https://amg00405-rakutentv-cgtndocumentary-rakuten-0ql8j.amagi.tv/master.m3u8",
+        "name": "CGTN Documentary"
+      },
+      "cgtn": {
+        "path": "https://amg00405-rakutentv-cgtn-rakuten-i9tar.amagi.tv/master.m3u8",
+        "name": "CGTN"
+      },
+      "china-travel": {
+        "path": "https://amg01314-amg01314c7-distrotv-us-10219.playouts.now.amagi.tv/playlist/amg01314-cgtn-cgtnchinatravel-distrotvus/playlist.m3u8",
+        "name": "China Travel"
+      },
+      "cctv-4": {
+        "path": "http://74.91.26.218:82/live/cctv4hd.m3u8",
+        "name": "CCTV 4"
+      },
+      "cna": {
+        "path": "https://d2e1asnsl7br7b.cloudfront.net/7782e205e72f43aeb4a48ec97f66ebbe/index.m3u8",
+        "name": "CNA"
+      },
+      "nhk-world-japan": {
+        "path": "https://nhk.lls.pbs.org/index.m3u8",
+        "name": "NHK World Japan"
+      },
+      "arirang": {
+        "path": "http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8",
+        "name": "Arirang"
+      },
+      "trt-world": {
+        "path": "https://tv-trtworld.medya.trt.com.tr/master_1440.m3u8",
+        "name": "TRT World"
+      },
+      "wion": {
+        "path": "http://vg-zeefta.akamaized.net/ptnr-yupptv/title-wion/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/20c3c0d9-0256-43fe-bca6-70fdd490b957/main.m3u8",
+        "name": "Wion"
+      },
+      "dw-news": {
+        "path": "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/master.m3u8",
+        "name": "DW News"
+      },
+      "france-24": {
+        "path": "https://live.france24.com/hls/live/2037218-b/F24_EN_HI_HLS/master_5000.m3u8",
+        "name": "France24 English"
+      },
+      "kbs-world": {
+        "path": "https://stream8.cinerama.uz/1448/playlist.m3u8",
+        "name": "KBS World"
+      },
+      "freedom": {
+        "path": "https://dash4.antik.sk/live/test_uatv/playlist.m3u8",
+        "name": "Freedom"
+      },
+      "moonbug": {
+        "path": "https://moonbug-rokuus.amagi.tv/playlist.m3u8",
+        "name": "Moonbug"
+      },
+      "tv5-monde-info": {
+        "path": "https://ott.tv5monde.com/Content/HLS/Live/channel(info)/variant.m3u8",
+        "name": "TV5 Monde Info"
       }
     }
   },
