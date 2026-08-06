@@ -331,17 +331,9 @@
         "path": "https://amg01314-amg01314c7-distrotv-us-10219.playouts.now.amagi.tv/playlist/amg01314-cgtn-cgtnchinatravel-distrotvus/playlist.m3u8",
         "name": "China Travel"
       },
-      "cctv-4": {
-        "path": "http://74.91.26.218:82/live/cctv4hd.m3u8",
-        "name": "CCTV 4"
-      },
       "cna": {
         "path": "https://d2e1asnsl7br7b.cloudfront.net/7782e205e72f43aeb4a48ec97f66ebbe/index.m3u8",
         "name": "CNA"
-      },
-      "nhk-world-japan": {
-        "path": "https://nhk.lls.pbs.org/index.m3u8",
-        "name": "NHK World Japan"
       },
       "arirang": {
         "path": "http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8",
@@ -374,10 +366,6 @@
       "moonbug": {
         "path": "https://moonbug-rokuus.amagi.tv/playlist.m3u8",
         "name": "Moonbug"
-      },
-      "tv5-monde-info": {
-        "path": "https://ott.tv5monde.com/Content/HLS/Live/channel(info)/variant.m3u8",
-        "name": "TV5 Monde Info"
       },
       "tvri": {
         "path": "https://ott-balancer.tvri.go.id/live/eds/Nasional/hls/Nasional.m3u8",
