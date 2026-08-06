@@ -175,8 +175,8 @@ https://api-stream.vidiraplay.biz.id/hls/ch/021b5b8071e6d302e49b6e00f5f8bdbcf9/m
 https://api-stream.vidiraplay.biz.id/hls/ch/02a8d3cb84b34bbbbcd3a9df921ad2c456/master.m3u8
 #EXTINF:-1 group-title="Grup 02",TV9 Nusantara
 https://api-stream.vidiraplay.biz.id/hls/ch/02457f7946c7104a28df9ba4d570d2d883/master.m3u8
-#EXTINF:-1 group-title="Grup 02",TVRI World
-https://api-stream.vidiraplay.biz.id/hls/ch/021eccac50f385d1a9abcc8993c821df1a/master.m3u8
+#EXTINF:-1 group-title="Grup 02",TVRI
+https://api-stream.vidiraplay.biz.id/hls/ch/027f5cc20f1481b1d98207d18029776647/master.m3u8
 #EXTINF:-1 group-title="Grup 02",Wion
 https://api-stream.vidiraplay.biz.id/hls/ch/02f69a75a86e6254f4659a08d22c2506a3/master.m3u8
 #EXTINF:-1 group-title="Grup 03",African News

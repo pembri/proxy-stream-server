@@ -170,12 +170,12 @@ https://cdn-transmedia-server.vidiraplay.biz.id/stream-hls/trans7/master.m3u8
 #EXTINF:-1 group-title="Grup 02",Trans TV
 https://cdn-transmedia-server.vidiraplay.biz.id/stream-hls/transtv/master.m3u8
 #EXTINF:-1 group-title="Grup 02",TRT World
-https://tv-trtworld.medya.trt.com.tr/master_1440.m3u8
+https://tv-trtworld.medya.trt.com.tr/master.m3u8
 #EXTINF:-1 group-title="Grup 02",TV5 Monde Info
 https://ott.tv5monde.com/Content/HLS/Live/channel(info)/variant.m3u8
 #EXTINF:-1 group-title="Grup 02",TV9 Nusantara
 https://5bf7b725107e5.streamlock.net/tv9/tv9/playlist.m3u8
-#EXTINF:-1 group-title="Grup 02",TVRI World
+#EXTINF:-1 group-title="Grup 02",TVRI
 https://ott-balancer.tvri.go.id/live/eds/Nasional/hls/Nasional.m3u8
 #EXTINF:-1 group-title="Grup 02",Wion
 http://vg-zeefta.akamaized.net/ptnr-yupptv/title-wion/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/20c3c0d9-0256-43fe-bca6-70fdd490b957/main.m3u8

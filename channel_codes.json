@@ -64,7 +64,6 @@
     "garuda-tv": "17a41cea0f482e2f0b2cc1f994a26aca",
     "jtv": "1177a5f768fb263db0c238524c074207",
     "magna-channel": "74db9cc4388652ad1ab34f7c55cc9851",
-    "tvri-world": "1eccac50f385d1a9abcc8993c821df1a",
     "dmi-tv": "1648ffb7f2fb0132a17cfa7ba85f3700",
     "mqtv": "3acdad14b0f15e7ab4110ebe62c6881f",
     "metro-tv": "cbd85c58df08fc506a74b1f7f3038629",
@@ -91,7 +90,8 @@
     "kbs-world": "685b006fc5aafdd9004547d1bdaf559c",
     "freedom": "ae00fd4dd30e451fd8d4a9d2bb66a9c5",
     "moonbug": "2d4a436bf41ab849fc5b4b09926bb55f",
-    "tv5-monde-info": "a8d3cb84b34bbbbcd3a9df921ad2c456"
+    "tv5-monde-info": "a8d3cb84b34bbbbcd3a9df921ad2c456",
+    "tvri": "7f5cc20f1481b1d98207d18029776647"
   },
   "03": {
     "sctv": "7004cf0d6592d8a5803822c50d6dca86",
