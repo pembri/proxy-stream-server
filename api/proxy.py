@@ -116,7 +116,7 @@ konsisten sampai ke sub-resource:
 - Domain lain (termasuk api-stream.vidiraplay.biz.id, yang DITANAM
   di website publik) WAJIB:
   a) Header Referer/Origin yang hostname-nya vidiraplay.biz.id atau
-     subdomainnya (ALLOWED_REFERER_DOMAIN).
+     subdomainnya salah satu dari ALLOWED_REFERER_DOMAINS.
   b) User-Agent yang bukan tools/script jelas (lihat is_blocked_user_agent).
   c) Request susulan (sub-playlist/segmen/key) dari IP yang SAMA
      dengan yang generate token di awal (IP binding).
@@ -149,7 +149,7 @@ CATATAN BUAT SESI/AKUN CLAUDE LAIN YANG LANJUTIN PROJECT INI:
   tanya dulu ke user sebelum ubah struktur besar - jangan langsung
   refactor karena bisa merusak grup yang sudah lancar.
 - Jangan hapus/ubah TESTING_DOMAINS_NO_REFERER_CHECK atau
-  ALLOWED_REFERER_DOMAIN tanpa diminta eksplisit - itu pemisahan
+  ALLOWED_REFERER_DOMAINS tanpa diminta eksplisit - itu pemisahan
   keamanan publik vs testing yang disengaja.
 - Jangan aktifkan direct_subresources di channel.json manapun tanpa
   cek CORS origin-nya dulu.
@@ -177,7 +177,7 @@ from http.server import BaseHTTPRequestHandler
 
 TOKEN_TTL_SECONDS = 12 * 60 * 60  # 12 jam (diperpendek dari 24 jam - bagian dari proteksi tambahan api-stream)
 SECRET_KEY = os.environ.get("PROXY_SECRET_KEY", "ganti-secret-key-ini-di-env-vercel")
-ALLOWED_REFERER_DOMAIN = "vidiraplay.biz.id"  # hotlink protection - lihat _check_referer
+ALLOWED_REFERER_DOMAINS = {"vidiraplay.biz.id", "riraplay.web.id"}  # hotlink protection - lihat _check_referer
 TESTING_DOMAINS_NO_REFERER_CHECK = {"proxy-stream-server.vidiraplay.biz.id"}  # domain testing, TIDAK pernah dipublish - dikecualikan dari SEMUA proteksi (Referer, IP binding, User-Agent check) - lihat _check_referer & do_GET
 
 # User-Agent yang jelas-jelas bukan browser (tools/script) - ditolak di domain
@@ -331,6 +331,7 @@ def rewrite_key_line(line, base, group, slug, exp, ip="", direct=False):
     def replace(m):
         key_url = m.group(1)
         abs_key_url = urllib.parse.urljoin(base, key_url)
+        abs_key_url = urllib.parse.quote(abs_key_url, safe=":/?&=%.-_~", encoding="latin-1")
         if direct:
             return f'URI="{abs_key_url}"'
         u = encode_u(abs_key_url)
@@ -356,6 +357,7 @@ def rewrite_playlist(body_text, origin_url, group, slug, exp, token, user_agent,
             out_lines.append(line)
             continue
         abs_url = urllib.parse.urljoin(base, stripped)
+        abs_url = urllib.parse.quote(abs_url, safe=":/?&=%.-_~", encoding="latin-1")
 
         if direct:
             # Mode direct_subresources aktif (lihat get_group_direct_subresources) -
@@ -479,7 +481,7 @@ class handler(BaseHTTPRequestHandler):
             host = urllib.parse.urlparse(ref).hostname or ""
         except Exception:
             return False
-        return host == ALLOWED_REFERER_DOMAIN or host.endswith("." + ALLOWED_REFERER_DOMAIN)
+        return any(host == d or host.endswith("." + d) for d in ALLOWED_REFERER_DOMAINS)
 
     def do_GET(self):
         is_testing = self._is_testing_domain()
@@ -618,7 +620,7 @@ class handler(BaseHTTPRequestHandler):
                 return None
             m_status, m_body, m_ctype = fetch_origin(master_origin_url, user_agent)
             base = master_origin_url.rsplit("/", 1)[0] + "/"
-            text = m_body.decode("utf-8", errors="ignore")
+            text = m_body.decode("latin-1")  # latin-1 = byte-preserving 1:1, gak rusak byte mentah non-ASCII (kasus nyata: NHK World Japan)
             count = 0
             fresh_abs_url = None
             for line in text.splitlines():
@@ -627,6 +629,7 @@ class handler(BaseHTTPRequestHandler):
                     continue
                 if count == idx:
                     fresh_abs_url = urllib.parse.urljoin(base, stripped)
+                    fresh_abs_url = urllib.parse.quote(fresh_abs_url, safe=":/?&=%.-_~", encoding="latin-1")
                     break
                 count += 1
             if not fresh_abs_url:
@@ -675,7 +678,7 @@ class handler(BaseHTTPRequestHandler):
                     return self._send(e.code, f"Upstream error {e.code}")
             except Exception as e:
                 return self._send(502, f"Gagal fetch origin: {e}")
-            text = body.decode("utf-8", errors="ignore")
+            text = body.decode("latin-1")  # latin-1 = byte-preserving 1:1, gak rusak byte mentah non-ASCII (kasus nyata: NHK World Japan)
             direct = get_group_direct_subresources(group)
             rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent, is_top_level=is_top_level, direct=direct, ip=ip)
             return self._send(200, rewritten, "application/vnd.apple.mpegurl")
