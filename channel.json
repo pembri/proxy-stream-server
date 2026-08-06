@@ -271,10 +271,6 @@
         "path": "https://edge.medcom.id/live-edge/smil:magna.smil/playlist.m3u8",
         "name": "Magna Channel"
       },
-      "tvri-world": {
-        "path": "https://ott-balancer.tvri.go.id/live/eds/Nasional/hls/Nasional.m3u8",
-        "name": "TVRI World"
-      },
       "dmi-tv": {
         "path": "https://tvstreamcast.com/tawaftv.m3u8",
         "name": "DMI TV"
@@ -352,7 +348,7 @@
         "name": "Arirang"
       },
       "trt-world": {
-        "path": "https://tv-trtworld.medya.trt.com.tr/master_1440.m3u8",
+        "path": "https://tv-trtworld.medya.trt.com.tr/master.m3u8",
         "name": "TRT World"
       },
       "wion": {
@@ -382,6 +378,10 @@
       "tv5-monde-info": {
         "path": "https://ott.tv5monde.com/Content/HLS/Live/channel(info)/variant.m3u8",
         "name": "TV5 Monde Info"
+      },
+      "tvri": {
+        "path": "https://ott-balancer.tvri.go.id/live/eds/Nasional/hls/Nasional.m3u8",
+        "name": "TVRI"
       }
     }
   },
