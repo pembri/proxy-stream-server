@@ -331,6 +331,7 @@ def rewrite_key_line(line, base, group, slug, exp, ip="", direct=False):
     def replace(m):
         key_url = m.group(1)
         abs_key_url = urllib.parse.urljoin(base, key_url)
+        abs_key_url = urllib.parse.quote(abs_key_url, safe=":/?&=%.-_~", encoding="latin-1")
         if direct:
             return f'URI="{abs_key_url}"'
         u = encode_u(abs_key_url)
@@ -356,6 +357,7 @@ def rewrite_playlist(body_text, origin_url, group, slug, exp, token, user_agent,
             out_lines.append(line)
             continue
         abs_url = urllib.parse.urljoin(base, stripped)
+        abs_url = urllib.parse.quote(abs_url, safe=":/?&=%.-_~", encoding="latin-1")
 
         if direct:
             # Mode direct_subresources aktif (lihat get_group_direct_subresources) -
@@ -618,7 +620,7 @@ class handler(BaseHTTPRequestHandler):
                 return None
             m_status, m_body, m_ctype = fetch_origin(master_origin_url, user_agent)
             base = master_origin_url.rsplit("/", 1)[0] + "/"
-            text = m_body.decode("utf-8", errors="ignore")
+            text = m_body.decode("latin-1")  # latin-1 = byte-preserving 1:1, gak rusak byte mentah non-ASCII (kasus nyata: NHK World Japan)
             count = 0
             fresh_abs_url = None
             for line in text.splitlines():
@@ -627,6 +629,7 @@ class handler(BaseHTTPRequestHandler):
                     continue
                 if count == idx:
                     fresh_abs_url = urllib.parse.urljoin(base, stripped)
+                    fresh_abs_url = urllib.parse.quote(fresh_abs_url, safe=":/?&=%.-_~", encoding="latin-1")
                     break
                 count += 1
             if not fresh_abs_url:
@@ -675,7 +678,7 @@ class handler(BaseHTTPRequestHandler):
                     return self._send(e.code, f"Upstream error {e.code}")
             except Exception as e:
                 return self._send(502, f"Gagal fetch origin: {e}")
-            text = body.decode("utf-8", errors="ignore")
+            text = body.decode("latin-1")  # latin-1 = byte-preserving 1:1, gak rusak byte mentah non-ASCII (kasus nyata: NHK World Japan)
             direct = get_group_direct_subresources(group)
             rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent, is_top_level=is_top_level, direct=direct, ip=ip)
             return self._send(200, rewritten, "application/vnd.apple.mpegurl")
