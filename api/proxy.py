@@ -178,6 +178,13 @@ from http.server import BaseHTTPRequestHandler
 TOKEN_TTL_SECONDS = 12 * 60 * 60  # 12 jam (diperpendek dari 24 jam - bagian dari proteksi tambahan api-stream)
 SECRET_KEY = os.environ.get("PROXY_SECRET_KEY", "ganti-secret-key-ini-di-env-vercel")
 ALLOWED_REFERER_DOMAINS = {"vidiraplay.biz.id", "riraplay.web.id"}  # hotlink protection - lihat _check_referer
+
+# Fallback "No Signal" - dipakai HANYA saat fetch PERTAMA KALI (master/entry
+# point) ke suatu channel gagal (origin mati/error/timeout). TIDAK berlaku
+# buat error di tengah streaming (sub-playlist/segmen yang gagal setelah
+# playback jalan) - itu dibiarkan gagal apa adanya seperti biasa, biar player
+# yang handle (retry/buffering dst), bukan disembunyikan.
+FALLBACK_NO_SIGNAL_URL = "https://stream.vidiraplay.biz.id/channel/no-signal.m3u8"
 TESTING_DOMAINS_NO_REFERER_CHECK = {"proxy-stream-server.vidiraplay.biz.id"}  # domain testing, TIDAK pernah dipublish - dikecualikan dari SEMUA proteksi (Referer, IP binding, User-Agent check) - lihat _check_referer & do_GET
 
 # User-Agent yang jelas-jelas bukan browser (tools/script) - ditolak di domain
@@ -608,6 +615,20 @@ class handler(BaseHTTPRequestHandler):
             token = make_token(group, slug, exp, "", ip_for_token)
             return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token)
 
+    def _try_no_signal_fallback(self, is_top_level):
+        """Coba fetch stream fallback "No Signal" - HANYA dipanggil kalau
+        is_top_level=True (fetch pertama kali ke suatu channel, dari Route
+        A/C/D/E). Return (status, body, ctype) kalau berhasil, None kalau
+        is_top_level=False (jangan fallback buat sub-resource) ATAU kalau
+        fetch ke stream fallback-nya sendiri ikut gagal (jarang, tapi kalau
+        terjadi caller harus tetap kirim error asli ke player)."""
+        if not is_top_level:
+            return None
+        try:
+            return fetch_origin(FALLBACK_NO_SIGNAL_URL, None)
+        except Exception:
+            return None
+
     def _reresolve_and_retry(self, group, slug, idx, user_agent):
         """Fetch ulang master ASLI channel ini dari channel.json (fresh,
         bukan dari cache/token lama), ambil baris variant ke-idx (0-based,
@@ -673,11 +694,23 @@ class handler(BaseHTTPRequestHandler):
                     if retried is not None:
                         status, body, ctype = retried
                     else:
-                        return self._send(e.code, f"Upstream error {e.code}")
+                        fallback = self._try_no_signal_fallback(is_top_level)
+                        if fallback is None:
+                            return self._send(e.code, f"Upstream error {e.code}")
+                        status, body, ctype = fallback
+                        origin_url = FALLBACK_NO_SIGNAL_URL
                 else:
-                    return self._send(e.code, f"Upstream error {e.code}")
+                    fallback = self._try_no_signal_fallback(is_top_level)
+                    if fallback is None:
+                        return self._send(e.code, f"Upstream error {e.code}")
+                    status, body, ctype = fallback
+                    origin_url = FALLBACK_NO_SIGNAL_URL
             except Exception as e:
-                return self._send(502, f"Gagal fetch origin: {e}")
+                fallback = self._try_no_signal_fallback(is_top_level)
+                if fallback is None:
+                    return self._send(502, f"Gagal fetch origin: {e}")
+                status, body, ctype = fallback
+                origin_url = FALLBACK_NO_SIGNAL_URL
             text = body.decode("latin-1")  # latin-1 = byte-preserving 1:1, gak rusak byte mentah non-ASCII (kasus nyata: NHK World Japan)
             direct = get_group_direct_subresources(group)
             rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent, is_top_level=is_top_level, direct=direct, ip=ip)
