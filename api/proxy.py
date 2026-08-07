@@ -711,6 +711,19 @@ class handler(BaseHTTPRequestHandler):
                     return self._send(502, f"Gagal fetch origin: {e}")
                 status, body, ctype = fallback
                 origin_url = FALLBACK_NO_SIGNAL_URL
+
+            if is_top_level and (not body or not body.strip().startswith(b"#EXTM3U")):
+                # Origin balikin status 200 (bukan HTTP error) TAPI body-nya
+                # kosong/gak valid (bukan m3u8 beneran) - kasus nyata:
+                # ogietv.biz.id kadang balikin 200 dengan Content-Length: 0
+                # (rate-limit/cooldown/channel mati diam-diam, tanpa kasih
+                # kode error HTTP yang jelas). Ini TETAP dianggap kegagalan
+                # buat fetch pertama kali, trigger fallback yang sama.
+                fallback = self._try_no_signal_fallback(is_top_level)
+                if fallback is not None:
+                    status, body, ctype = fallback
+                    origin_url = FALLBACK_NO_SIGNAL_URL
+
             text = body.decode("latin-1")  # latin-1 = byte-preserving 1:1, gak rusak byte mentah non-ASCII (kasus nyata: NHK World Japan)
             direct = get_group_direct_subresources(group)
             rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent, is_top_level=is_top_level, direct=direct, ip=ip)
