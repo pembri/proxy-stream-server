@@ -11,7 +11,8 @@
     "UPDATE: grup 02 sudah diganti total (sumber lama 103.58.160.157 mati). Sumber baru per-channel beda domain (cdn-server-rctiplus.vidiraplay.biz.id & cdn-transmedia-server.vidiraplay.biz.id), makanya base_url grup 02 dikosongkan (\"\") dan tiap channel pakai URL absolute penuh di field 'path'. Ini valid dan tidak butuh perubahan proxy.py (base_url + path = \"\" + full_url = full_url).",
     "Grup 03: sumber cdn-server-vidio.vidiraplay.biz.id (proxy dari Vidio, worker sudah handle audio-track rewrite sendiri, TIDAK butuh User-Agent khusus). PENTING: slug 'btv' di sini adalah channel BTV asli (bukan Berita Satu) - jangan disamakan/ketuker dengan channel Berita Satu yang punya slug 'berita-satu' sendiri, keduanya channel yang BEDA meski sama-sama disingkat 'BTV' secara umum. Begitu juga 'musica' (grup 03) BEDA dengan 'musik-indonesia' (grup 01) - dua channel musik yang berbeda.",
     "Grup 04: sumber ogietv.biz.id (AES-128 encrypted HLS - lihat KEY_URI_RE di proxy.py yang nge-rewrite URI di baris #EXT-X-KEY, WAJIB ada supaya dekripsi jalan lewat proxy). Penamaan slug: channel yang punya varian FHD & HD dapet akhiran -1 (FHD) dan -2 (HD) - misal trans-tv-1 (FHD), trans-tv-2 (HD). Channel yang cuma 1 varian gak pakai akhiran. CGTN Documentary di sumber ini sebenarnya cuma CGTN biasa (nama sumbernya salah), jadi slug+nama-nya 'cgtn' bukan 'cgtn-documentary'.",
-    "Grup 02 update: ditambah 33 channel dari sumber official langsung (masing-masing domain berbeda-beda, base_url tetap \"\" + full URL absolute di path, sama seperti 8 channel awal grup 02). 'U Channel' (srs.u-channel.tv) di-skip karena 404 mati saat ditest. CGTN dan CGTN Documentary di grup 02 ini BEDA channel (URL beda, dikonfirmasi user) - jangan disamakan kayak kasus grup 04 dulu. CCTV 4 (grup 02) BEDA dari CCTV 4 Asia (grup 03) - nama beda, dianggap channel beda."
+    "Grup 02 update: ditambah 33 channel dari sumber official langsung (masing-masing domain berbeda-beda, base_url tetap \"\" + full URL absolute di path, sama seperti 8 channel awal grup 02). 'U Channel' (srs.u-channel.tv) di-skip karena 404 mati saat ditest. CGTN dan CGTN Documentary di grup 02 ini BEDA channel (URL beda, dikonfirmasi user) - jangan disamakan kayak kasus grup 04 dulu. CCTV 4 (grup 02) BEDA dari CCTV 4 Asia (grup 03) - nama beda, dianggap channel beda.",
+    "Grup 05: sumber http://119.82.250.109:8080/nl.m3u8?id={id}, tanpa User-Agent khusus. NHK (plain) BEDA dari nhk-world-japan (yang sudah dihapus dari grup 02). Russian Today = RT (bukan RT Documentary, keduanya channel beda). fashion-tv-southeast-asia (grup 03) sudah di-rename jadi fashion-tv (channel yang sama dengan grup 05)."
   ],
   "01": {
     "base_url": "http://103.148.44.38:8001",
@@ -955,6 +956,132 @@
       "indosiar-2": {
         "path": "1325.m3u8",
         "name": "INDOSIAR HD"
+      }
+    }
+  },
+  "05": {
+    "base_url": "http://119.82.250.109:8080/nl.m3u8?id=",
+    "user_agent": null,
+    "channels": {
+      "trans-7": {
+        "path": "1002",
+        "name": "Trans 7"
+      },
+      "cna": {
+        "path": "1006",
+        "name": "CNA"
+      },
+      "cartoonito": {
+        "path": "1012",
+        "name": "Cartoonito"
+      },
+      "cartoon-network": {
+        "path": "1013",
+        "name": "Cartoon Network"
+      },
+      "fashion-tv": {
+        "path": "1018",
+        "name": "Fashion TV"
+      },
+      "cgtn": {
+        "path": "1020",
+        "name": "CGTN"
+      },
+      "cgtn-documentary": {
+        "path": "1021",
+        "name": "CGTN Documentary"
+      },
+      "france-24": {
+        "path": "1022",
+        "name": "France24"
+      },
+      "cinema-world": {
+        "path": "1024",
+        "name": "Cinema World"
+      },
+      "trt-world": {
+        "path": "1027",
+        "name": "TRT World"
+      },
+      "hunan-tv": {
+        "path": "1030",
+        "name": "Hunan TV"
+      },
+      "zhejiang": {
+        "path": "1031",
+        "name": "Zhejiang"
+      },
+      "jiangsu-tv": {
+        "path": "1032",
+        "name": "Jiangsu TV"
+      },
+      "dragon-tv": {
+        "path": "1034",
+        "name": "Dragon TV"
+      },
+      "cctv-4": {
+        "path": "1038",
+        "name": "CCTV4"
+      },
+      "phoenix-chinese": {
+        "path": "1041",
+        "name": "Phoenix Chinese"
+      },
+      "phoenix-info-news": {
+        "path": "1042",
+        "name": "Phoenix Info News"
+      },
+      "metro-tv": {
+        "path": "1048",
+        "name": "Metro TV"
+      },
+      "euronews": {
+        "path": "1052",
+        "name": "Euro News"
+      },
+      "nhk": {
+        "path": "1063",
+        "name": "NHK"
+      },
+      "tvbs": {
+        "path": "1099",
+        "name": "TVBS"
+      },
+      "abc-australia": {
+        "path": "1119",
+        "name": "ABC Australia"
+      },
+      "trans-tv": {
+        "path": "1145",
+        "name": "Trans TV"
+      },
+      "russian-today": {
+        "path": "1152",
+        "name": "Russian Today"
+      },
+      "kbs-world": {
+        "path": "1154",
+        "name": "KBS World"
+      },
+      "axn": {
+        "path": "1158",
+        "name": "AXN"
+      },
+      "rt-documentary": {
+        "path": "1153",
+        "name": "RT Documentary"
+      },
+      "animax": {
+        "path": "1162",
+        "name": "Animax"
+      },
+      "u-channel-tv": {
+        "path": "1165",
+        "name": "U Channel"
+      },
+      "tennis-channel": {
+        "path": "1169",
+        "name": "Tennis Channel"
       }
     }
   }
