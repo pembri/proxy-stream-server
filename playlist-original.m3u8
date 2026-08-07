@@ -107,8 +107,6 @@ http://amdlive-ch01.ctnd.com.edgesuite.net/arirang_1ch/smil:arirang_1ch.smil/pla
 https://lnd0t3b922.tenbytecdn.com/ta-sg1/89c624c5-4b4f-473c-b50d-1a156a1c0174/master.m3u8
 #EXTINF:-1 group-title="Grup 02",BTV
 https://lnd0t3b922.tenbytecdn.com/ta-sg1/90369cf5-6ac2-411d-b3d0-15fae10a2e2c/master.m3u8
-#EXTINF:-1 group-title="Grup 02",CCTV 4
-http://74.91.26.218:82/live/cctv4hd.m3u8
 #EXTINF:-1 group-title="Grup 02",CGTN
 https://amg00405-rakutentv-cgtn-rakuten-i9tar.amagi.tv/master.m3u8
 #EXTINF:-1 group-title="Grup 02",CGTN Documentary
@@ -153,8 +151,6 @@ https://cdn-server-rctiplus.vidiraplay.biz.id/stream-hls/mnctv/index.m3u8
 https://moonbug-rokuus.amagi.tv/playlist.m3u8
 #EXTINF:-1 group-title="Grup 02",MQTV
 https://5bf7b725107e5.streamlock.net/mqtv/mqtv/playlist.m3u8
-#EXTINF:-1 group-title="Grup 02",NHK World Japan
-https://nhk.lls.pbs.org/index.m3u8
 #EXTINF:-1 group-title="Grup 02",Nusantara TV
 https://nusantaratv.siar.us/nusantaratv/live/playlist.m3u8
 #EXTINF:-1 group-title="Grup 02",RCTI
@@ -171,8 +167,6 @@ https://cdn-transmedia-server.vidiraplay.biz.id/stream-hls/trans7/master.m3u8
 https://cdn-transmedia-server.vidiraplay.biz.id/stream-hls/transtv/master.m3u8
 #EXTINF:-1 group-title="Grup 02",TRT World
 https://tv-trtworld.medya.trt.com.tr/master.m3u8
-#EXTINF:-1 group-title="Grup 02",TV5 Monde Info
-https://ott.tv5monde.com/Content/HLS/Live/channel(info)/variant.m3u8
 #EXTINF:-1 group-title="Grup 02",TV9 Nusantara
 https://5bf7b725107e5.streamlock.net/tv9/tv9/playlist.m3u8
 #EXTINF:-1 group-title="Grup 02",TVRI
@@ -465,3 +459,63 @@ https://ogietv.biz.id:443/Dimas01/bara01/1898.m3u8
 https://ogietv.biz.id:443/Dimas01/bara01/1388.m3u8
 #EXTINF:-1 group-title="Grup 04",Zee Bioskop
 https://ogietv.biz.id:443/Dimas01/bara01/1377.m3u8
+#EXTINF:-1 group-title="Grup 05",ABC Australia
+http://119.82.250.109:8080/nl.m3u8?id=1119
+#EXTINF:-1 group-title="Grup 05",Animax
+http://119.82.250.109:8080/nl.m3u8?id=1162
+#EXTINF:-1 group-title="Grup 05",AXN
+http://119.82.250.109:8080/nl.m3u8?id=1158
+#EXTINF:-1 group-title="Grup 05",Cartoon Network
+http://119.82.250.109:8080/nl.m3u8?id=1013
+#EXTINF:-1 group-title="Grup 05",Cartoonito
+http://119.82.250.109:8080/nl.m3u8?id=1012
+#EXTINF:-1 group-title="Grup 05",CCTV4
+http://119.82.250.109:8080/nl.m3u8?id=1038
+#EXTINF:-1 group-title="Grup 05",CGTN
+http://119.82.250.109:8080/nl.m3u8?id=1020
+#EXTINF:-1 group-title="Grup 05",CGTN Documentary
+http://119.82.250.109:8080/nl.m3u8?id=1021
+#EXTINF:-1 group-title="Grup 05",Cinema World
+http://119.82.250.109:8080/nl.m3u8?id=1024
+#EXTINF:-1 group-title="Grup 05",CNA
+http://119.82.250.109:8080/nl.m3u8?id=1006
+#EXTINF:-1 group-title="Grup 05",Dragon TV
+http://119.82.250.109:8080/nl.m3u8?id=1034
+#EXTINF:-1 group-title="Grup 05",Euro News
+http://119.82.250.109:8080/nl.m3u8?id=1052
+#EXTINF:-1 group-title="Grup 05",Fashion TV
+http://119.82.250.109:8080/nl.m3u8?id=1018
+#EXTINF:-1 group-title="Grup 05",France24
+http://119.82.250.109:8080/nl.m3u8?id=1022
+#EXTINF:-1 group-title="Grup 05",Hunan TV
+http://119.82.250.109:8080/nl.m3u8?id=1030
+#EXTINF:-1 group-title="Grup 05",Jiangsu TV
+http://119.82.250.109:8080/nl.m3u8?id=1032
+#EXTINF:-1 group-title="Grup 05",KBS World
+http://119.82.250.109:8080/nl.m3u8?id=1154
+#EXTINF:-1 group-title="Grup 05",Metro TV
+http://119.82.250.109:8080/nl.m3u8?id=1048
+#EXTINF:-1 group-title="Grup 05",NHK
+http://119.82.250.109:8080/nl.m3u8?id=1063
+#EXTINF:-1 group-title="Grup 05",Phoenix Chinese
+http://119.82.250.109:8080/nl.m3u8?id=1041
+#EXTINF:-1 group-title="Grup 05",Phoenix Info News
+http://119.82.250.109:8080/nl.m3u8?id=1042
+#EXTINF:-1 group-title="Grup 05",RT Documentary
+http://119.82.250.109:8080/nl.m3u8?id=1153
+#EXTINF:-1 group-title="Grup 05",Russian Today
+http://119.82.250.109:8080/nl.m3u8?id=1152
+#EXTINF:-1 group-title="Grup 05",Tennis Channel
+http://119.82.250.109:8080/nl.m3u8?id=1169
+#EXTINF:-1 group-title="Grup 05",Trans 7
+http://119.82.250.109:8080/nl.m3u8?id=1002
+#EXTINF:-1 group-title="Grup 05",Trans TV
+http://119.82.250.109:8080/nl.m3u8?id=1145
+#EXTINF:-1 group-title="Grup 05",TRT World
+http://119.82.250.109:8080/nl.m3u8?id=1027
+#EXTINF:-1 group-title="Grup 05",TVBS
+http://119.82.250.109:8080/nl.m3u8?id=1099
+#EXTINF:-1 group-title="Grup 05",U Channel
+http://119.82.250.109:8080/nl.m3u8?id=1165
+#EXTINF:-1 group-title="Grup 05",Zhejiang
+http://119.82.250.109:8080/nl.m3u8?id=1031
