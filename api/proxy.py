@@ -51,21 +51,13 @@ playlist, key) path RELATIF (bukan absolute ke domain tertentu),
 supaya otomatis resolve ke domain YANG SAMA dengan yang sedang
 diakses (api-stream ATAU proxy-stream-server). Ini SENGAJA diubah
 dari desain sebelumnya (yang sempat absolute ke domain testing) -
-supaya proteksi (Referer + IP binding + User-Agent) konsisten
+supaya proteksi (Referer + User-Agent) konsisten
 berlaku di SEMUA level, dari titik masuk sampai ke segmen/key,
 bukan cuma di titik masuk doang. JANGAN diubah balik ke absolute
 tanpa diminta eksplisit.
 
 CATATAN PROTEKSI TAMBAHAN (selain Referer/Origin):
 - TOKEN_TTL_SECONDS = 12 jam (diperpendek dari 24 jam).
-- IP BINDING: token dibuat dengan menyertakan IP peminta (lihat
-  make_token/verify_token parameter "ip", get_client_ip). Di domain
-  testing, ip="" konsisten (IP binding TIDAK berlaku). Di domain
-  diproteksi (api-stream), ip = IP asli client (dari X-Forwarded-For,
-  fallback X-Real-IP / client_address) - token cuma valid dipakai
-  dari IP yang sama dengan yang minta pertama kali. TRADE-OFF: user
-  di jaringan mobile yang IP-nya berganti di tengah sesi bisa
-  terputus - risiko yang disadari & diterima user.
 - USER-AGENT BLOCKLIST (is_blocked_user_agent, UA_BLOCKLIST_SUBSTRINGS):
   di domain diproteksi, request dengan User-Agent yang jelas bukan
   browser (curl, wget, python-requests, dll) atau tanpa User-Agent
@@ -76,6 +68,10 @@ CATATAN PROTEKSI TAMBAHAN (selain Referer/Origin):
   (ada slug asli yang beneran mengandung titik, misal channel yang
   namanya berakhiran titik - jangan asumsikan semua titik di slug
   adalah ekstensi palsu).
+- IP BINDING PERNAH ADA, SUDAH DIHAPUS ATAS PERMINTAAN USER (token
+  dulu ikut menyertakan IP peminta, sekarang tidak lagi - token cuma
+  bergantung ke group/slug/exp/u). JANGAN ditambahkan lagi tanpa
+  diminta eksplisit.
 
 CATATAN PERCOBAAN YANG SUDAH DIBATALKAN (jangan diulang tanpa alasan baru):
 - Content-Type manifest sempat dicoba dibedakan per User-Agent
@@ -105,7 +101,7 @@ tanpa cek CORS origin-nya dulu (curl -I, cek header
 Access-Control-Allow-Origin).
 
 =====================================================================
-HOTLINK PROTECTION (_check_referer + IP binding + UA blocklist) -
+HOTLINK PROTECTION (_check_referer + UA blocklist) -
 berlaku di SEMUA rute (A/B/C), sengaja pakai path relatif supaya
 konsisten sampai ke sub-resource:
 =====================================================================
@@ -118,8 +114,6 @@ konsisten sampai ke sub-resource:
   a) Header Referer/Origin yang hostname-nya vidiraplay.biz.id atau
      subdomainnya salah satu dari ALLOWED_REFERER_DOMAINS.
   b) User-Agent yang bukan tools/script jelas (lihat is_blocked_user_agent).
-  c) Request susulan (sub-playlist/segmen/key) dari IP yang SAMA
-     dengan yang generate token di awal (IP binding).
   Kalau salah satu gagal -> 403. INI BUKAN proteksi mutlak (bisa
   dipalsukan manual oleh yang paham teknis, dan tools sejenis
   download-manager browser extension yang mereplay konteks browser
@@ -158,8 +152,8 @@ CATATAN BUAT SESI/AKUN CLAUDE LAIN YANG LANJUTIN PROJECT INI:
 - Jangan ubah Content-Type manifest jadi kondisional per User-Agent
   lagi (pernah dicoba, user minta revert - lihat catatan "PERCOBAAN
   YANG SUDAH DIBATALKAN" di atas).
-- Jangan longgarkan/hapus UA_BLOCKLIST_SUBSTRINGS atau IP binding
-  tanpa diminta eksplisit.
+- Jangan longgarkan/hapus UA_BLOCKLIST_SUBSTRINGS tanpa diminta eksplisit.
+- Jangan tambahkan lagi IP binding tanpa diminta eksplisit (pernah ada, sudah dihapus atas permintaan user).
 =====================================================================
 """
 
@@ -185,7 +179,7 @@ ALLOWED_REFERER_DOMAINS = {"vidiraplay.biz.id", "riraplay.web.id"}  # hotlink pr
 # playback jalan) - itu dibiarkan gagal apa adanya seperti biasa, biar player
 # yang handle (retry/buffering dst), bukan disembunyikan.
 FALLBACK_NO_SIGNAL_URL = "https://stream.vidiraplay.biz.id/channel/no-signal.m3u8"
-TESTING_DOMAINS_NO_REFERER_CHECK = {"proxy-stream-server.vidiraplay.biz.id"}  # domain testing, TIDAK pernah dipublish - dikecualikan dari SEMUA proteksi (Referer, IP binding, User-Agent check) - lihat _check_referer & do_GET
+TESTING_DOMAINS_NO_REFERER_CHECK = {"proxy-stream-server.vidiraplay.biz.id"}  # domain testing, TIDAK pernah dipublish - dikecualikan dari SEMUA proteksi (Referer, User-Agent check) - lihat _check_referer & do_GET
 
 # User-Agent yang jelas-jelas bukan browser (tools/script) - ditolak di domain
 # yang diproteksi (bukan domain testing). Ini heuristik ringan, BUKAN proteksi
@@ -238,22 +232,19 @@ def get_combined_code(group, slug):
     return f"{group}{code}" if code else None
 
 
-def make_token(group, slug, exp, u="", ip=""):
-    """ip="" (string kosong) dipakai konsisten kalau domain testing (IP
-    binding TIDAK berlaku di situ). Kalau domain diproteksi (api-stream),
-    ip diisi IP asli peminta - token cuma valid dipakai dari IP yang sama."""
-    msg = f"{group}:{slug}:{exp}:{u}:{ip}".encode("utf-8")
+def make_token(group, slug, exp, u=""):
+    msg = f"{group}:{slug}:{exp}:{u}".encode("utf-8")
     return hmac.new(SECRET_KEY.encode("utf-8"), msg, hashlib.sha256).hexdigest()
 
 
-def verify_token(group, slug, exp, token, u="", ip=""):
+def verify_token(group, slug, exp, token, u=""):
     try:
         exp_int = int(exp)
     except (TypeError, ValueError):
         return False
     if time.time() > exp_int:
         return False
-    expected = make_token(group, slug, exp_int, u, ip)
+    expected = make_token(group, slug, exp_int, u)
     return hmac.compare_digest(expected, token or "")
 
 
@@ -319,7 +310,7 @@ def get_group_direct_subresources(group):
     return bool(grp.get("direct_subresources")) if grp else False
 
 
-def rewrite_key_line(line, base, group, slug, exp, ip="", direct=False):
+def rewrite_key_line(line, base, group, slug, exp, direct=False):
     """Rewrite URI="..." di baris #EXT-X-KEY (dipakai stream ter-enkripsi
     AES-128, misal ogietv). URI di baris ini SERING kali relatif (contoh:
     "/key/xxxx") - kalau dibiarkan apa adanya, player bakal resolve URI
@@ -342,7 +333,7 @@ def rewrite_key_line(line, base, group, slug, exp, ip="", direct=False):
         if direct:
             return f'URI="{abs_key_url}"'
         u = encode_u(abs_key_url)
-        new_token = make_token(group, slug, exp, u, ip)
+        new_token = make_token(group, slug, exp, u)
         query = urllib.parse.urlencode({"exp": exp, "token": new_token, "u": u})
         combined = get_combined_code(group, slug)
         prefix = f"ch/{combined}" if combined else f"{group}/{slug}"
@@ -351,14 +342,14 @@ def rewrite_key_line(line, base, group, slug, exp, ip="", direct=False):
     return KEY_URI_RE.sub(replace, line)
 
 
-def rewrite_playlist(body_text, origin_url, group, slug, exp, token, user_agent, is_top_level=False, direct=False, ip=""):
+def rewrite_playlist(body_text, origin_url, group, slug, exp, token, user_agent, is_top_level=False, direct=False):
     base = origin_url.rsplit("/", 1)[0] + "/"
     out_lines = []
     idx = 0
     for line in body_text.splitlines():
         stripped = line.strip()
         if stripped.startswith("#EXT-X-KEY") and "URI=" in stripped:
-            out_lines.append(rewrite_key_line(line, base, group, slug, exp, ip=ip, direct=direct))
+            out_lines.append(rewrite_key_line(line, base, group, slug, exp, direct=direct))
             continue
         if not stripped or stripped.startswith("#"):
             out_lines.append(line)
@@ -377,7 +368,7 @@ def rewrite_playlist(body_text, origin_url, group, slug, exp, token, user_agent,
 
         u = encode_u(abs_url)
         new_exp = exp
-        new_token = make_token(group, slug, new_exp, u, ip)
+        new_token = make_token(group, slug, new_exp, u)
 
         # Nama file di path proxy HARUS bersih dari query string origin
         # (beberapa origin, misal rctiplus, punya URL variant yang sendirinya
@@ -429,21 +420,6 @@ def is_blocked_user_agent(ua):
     return any(s in ua_low for s in UA_BLOCKLIST_SUBSTRINGS)
 
 
-def get_client_ip(handler):
-    """Ambil IP asli client. Di Vercel, koneksi masuk lewat proxy platform
-    duluan, jadi IP asli client ada di header X-Forwarded-For (entri
-    PERTAMA = IP client asli), bukan di handler.client_address (itu IP
-    internal Vercel). Fallback ke X-Real-IP, baru ke client_address kalau
-    dua-duanya gak ada (misal waktu testing lokal)."""
-    xff = handler.headers.get("X-Forwarded-For", "")
-    if xff:
-        return xff.split(",")[0].strip()
-    xreal = handler.headers.get("X-Real-IP", "")
-    if xreal:
-        return xreal.strip()
-    return handler.client_address[0] if handler.client_address else ""
-
-
 class handler(BaseHTTPRequestHandler):
     def _send(self, status, body, content_type="text/plain; charset=utf-8", extra_headers=None):
         if isinstance(body, str):
@@ -475,7 +451,7 @@ class handler(BaseHTTPRequestHandler):
 
         KECUALI: domain di TESTING_DOMAINS_NO_REFERER_CHECK (misal
         proxy-stream-server.vidiraplay.biz.id) SENGAJA dibebaskan dari
-        check ini (dan dari IP binding + UA check juga, lihat do_GET) -
+        check ini (dan dari UA check juga, lihat do_GET) -
         domain itu dipakai user cuma buat testing manual (curl dari
         Termux dll), TIDAK PERNAH dipublish/ditanam di player publik."""
         if self._is_testing_domain():
@@ -499,13 +475,6 @@ class handler(BaseHTTPRequestHandler):
         if not is_testing and is_blocked_user_agent(self.headers.get("User-Agent", "")):
             return self._send(403, "Forbidden")
 
-        # ip_for_token: "" konsisten kalau domain testing (IP binding TIDAK
-        # berlaku di situ), atau IP asli client kalau domain diproteksi
-        # (api-stream) - dipakai buat generate & verifikasi token supaya
-        # token cuma valid dipakai dari IP yang sama dengan yang minta
-        # pertama kali.
-        ip_for_token = "" if is_testing else get_client_ip(self)
-
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
         qs = urllib.parse.parse_qs(parsed.query)
@@ -524,8 +493,8 @@ class handler(BaseHTTPRequestHandler):
             if not origin_url:
                 return self._send(404, "Channel tidak ditemukan")
             exp = int(time.time()) + TOKEN_TTL_SECONDS
-            token = make_token(group, slug, exp, "", ip_for_token)
-            return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token)
+            token = make_token(group, slug, exp, "")
+            return self._serve_live(group, slug, exp, token, "", idx=None)
 
         # --- Route B: URL final (dengan token) ---
         # Bentuk LAMA: /stream/live/{group}/{slug}/{file}?exp=...&token=...[&u=...][&idx=...]
@@ -543,7 +512,7 @@ class handler(BaseHTTPRequestHandler):
             u = qs.get("u", [""])[0]
             idx_raw = qs.get("idx", [None])[0]
             idx = int(idx_raw) if idx_raw is not None else None
-            return self._serve_live(group, slug, exp, token, u, idx=idx, ip=ip_for_token)
+            return self._serve_live(group, slug, exp, token, u, idx=idx)
 
         # --- Route C: vanity URL "API palsu" ---
         # /{group}/{slug}  (contoh: /03/sctv)
@@ -579,8 +548,8 @@ class handler(BaseHTTPRequestHandler):
             if not origin_url:
                 return self._send(404, "Not found")
             exp = int(time.time()) + TOKEN_TTL_SECONDS
-            token = make_token(group, slug, exp, "", ip_for_token)
-            return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token)
+            token = make_token(group, slug, exp, "")
+            return self._serve_live(group, slug, exp, token, "", idx=None)
 
         # --- Route D: gerbang masuk baru, format "assets" ---
         # /assets/ch/{group}{kode}.json  (contoh: /assets/ch/01d2c68a3d....json)
@@ -596,8 +565,8 @@ class handler(BaseHTTPRequestHandler):
             if not group:
                 return self._send(404, "Not found")
             exp = int(time.time()) + TOKEN_TTL_SECONDS
-            token = make_token(group, slug, exp, "", ip_for_token)
-            return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token)
+            token = make_token(group, slug, exp, "")
+            return self._serve_live(group, slug, exp, token, "", idx=None)
 
         # --- Route E: gerbang masuk baru, format "hls" ---
         # /hls/ch/{group}{kode}/master.m3u8
@@ -612,8 +581,8 @@ class handler(BaseHTTPRequestHandler):
             if not group:
                 return self._send(404, "Not found")
             exp = int(time.time()) + TOKEN_TTL_SECONDS
-            token = make_token(group, slug, exp, "", ip_for_token)
-            return self._serve_live(group, slug, exp, token, "", idx=None, ip=ip_for_token)
+            token = make_token(group, slug, exp, "")
+            return self._serve_live(group, slug, exp, token, "", idx=None)
 
     def _try_no_signal_fallback(self, is_top_level):
         """Coba fetch stream fallback "No Signal" - HANYA dipanggil kalau
@@ -659,13 +628,11 @@ class handler(BaseHTTPRequestHandler):
         except Exception:
             return None
 
-    def _serve_live(self, group, slug, exp, token, u, idx=None, ip=""):
+    def _serve_live(self, group, slug, exp, token, u, idx=None):
         """Logic inti serve konten (dulu = Route B). Dipanggil langsung dari
         entry point (Route A, tanpa redirect) maupun dari URL /stream/live/...
-        yang muncul di dalam playlist hasil rewrite (sub-playlist, segmen).
-        "ip" = "" kalau domain testing (IP binding gak berlaku), atau IP
-        asli client kalau domain diproteksi (api-stream)."""
-        if not verify_token(group, slug, exp, token, u, ip):
+        yang muncul di dalam playlist hasil rewrite (sub-playlist, segmen)."""
+        if not verify_token(group, slug, exp, token, u):
             return self._send(403, "Token tidak valid atau sudah kedaluwarsa")
 
         user_agent = get_group_ua(group)
@@ -726,7 +693,7 @@ class handler(BaseHTTPRequestHandler):
 
             text = body.decode("latin-1")  # latin-1 = byte-preserving 1:1, gak rusak byte mentah non-ASCII (kasus nyata: NHK World Japan)
             direct = get_group_direct_subresources(group)
-            rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent, is_top_level=is_top_level, direct=direct, ip=ip)
+            rewritten = rewrite_playlist(text, origin_url, group, slug, exp, token, user_agent, is_top_level=is_top_level, direct=direct)
             return self._send(200, rewritten, "application/vnd.apple.mpegurl")
 
         # Segmen (.ts dll) -> stream langsung, tidak dibuffer penuh ke
